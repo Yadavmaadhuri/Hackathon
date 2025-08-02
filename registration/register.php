@@ -256,18 +256,6 @@
     });
 
 
-
-
-    // //to check the memeber limit
-    // function checkMemberLimit() {
-    //   const addBtnDiv = document.getElementById("addMemberBtnDiv");
-    //   if (memberCount >= 4) {
-    //     addBtnDiv.style.display = "none";
-    //   } else {
-    //     addBtnDiv.style.display = "flex";
-    //   }
-    // }
-
     function checkMemberLimit() {
       const addBtn = document.querySelector("#addMemberBtnDiv button");
       addBtn.disabled = (memberCount >= 4); // disable at 4 members
