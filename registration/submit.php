@@ -1,5 +1,21 @@
 <?php
-include '../config/database.php';
+include '../config/database.php'; 
+
+//  Handle GET request: Check if team name exists
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['team_name'])) {
+    $teamName = $_GET['team_name'] ?? '';    
+
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM teams WHERE team_name = ?");
+    $stmt->bind_param("s", $teamName);
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    $stmt->close();
+
+    echo json_encode(['exists' => $count > 0]);
+    exit; // ⬅ Stop here so POST logic doesn’t run
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['team_name'], $_POST['college_name']) || empty($_POST['team_name']) || empty($_POST['college_name'])) {

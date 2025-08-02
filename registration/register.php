@@ -224,6 +224,40 @@
       document.getElementById("mEmailError").textContent = emailPattern.test(this.value) ? "" : "Invalid email format.";
     });
 
+
+    // backend duplicacy check 
+    // for team name
+    document.getElementById("teamName").addEventListener("input", async function (params) {
+      const teamName = this.value.trim();
+      const errorElement = document.getElementById("teamNameError");
+
+
+      // Don't send request if input is empty
+      if (teamName.length === 0) {
+        errorElement.textContent = "";
+        errorElement.style.color = ""; // reset color 
+
+        return;
+      }
+
+      try {
+        let response = await fetch(`submit.php?team_Name=${encodeURIComponent(teamName)}`)
+        let data = await response.json()
+        if (data.exists) {
+          errorElement.textContent = "Team name already exists.";
+          errorElement.style.color = "red"; // red for error
+        } else {
+          errorElement.textContent = "Team name is available.";
+          errorElement.style.color = "green"; // green for available
+        }
+      } catch (error) {
+        console.error("Error checking team name:", error);
+      }
+    });
+
+
+
+
     // //to check the memeber limit
     // function checkMemberLimit() {
     //   const addBtnDiv = document.getElementById("addMemberBtnDiv");
@@ -235,9 +269,9 @@
     // }
 
     function checkMemberLimit() {
-  const addBtn = document.querySelector("#addMemberBtnDiv button");
-  addBtn.disabled = (memberCount >= 4); // disable at 4 members
-}
+      const addBtn = document.querySelector("#addMemberBtnDiv button");
+      addBtn.disabled = (memberCount >= 4); // disable at 4 members
+    }
 
 
 
