@@ -1,0 +1,172 @@
+<?php
+session_start();
+
+// Debug session for troubleshooting (remove after confirming)
+// var_dump($_SESSION);
+
+include '../config/database.php';
+if (!isset($_SESSION['id'])) {
+    header("Location: login");
+    exit();
+}
+
+include_once('header.php');
+include_once('sidebar.php');
+include_once('topbar.php');
+
+// Fetch all members with their team info
+$sql = "
+    SELECT tm.id AS member_id,
+           tm.photo,
+           tm.admit_card,
+           tm.member_name,
+           tm.email,
+           tm.phone,
+           tm.symbol_no,
+           t.name AS team_name,
+           t.college,
+           t.status,
+           t.created_at
+    FROM team_members tm
+    INNER JOIN teams t ON tm.team_id = t.id
+    ORDER BY tm.id DESC
+";
+
+$result = $conn->query($sql);
+if (!$result) {
+    die("Error fetching members: " . $conn->error);
+}
+
+function getStatusLabel($status)
+{
+    switch ($status) {
+        case 1:
+            return '<span class="badge bg-success">Approved</span>';
+        case 2:
+            return '<span class="badge bg-danger">Rejected</span>';
+        default:
+            return '<span class="badge bg-warning text-dark">Pending</span>';
+    }
+}
+?>
+
+<div class="main">
+  <h2>Hackathon Member List</h2>
+
+  <form method="GET">
+    <input type="text" name="search" placeholder="Search team or college"
+      value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>" />
+    <select name="status">
+      <option value="">All</option>
+      <option value="0" <?= (isset($_GET['status']) && $_GET['status'] === 'Pending') ? 'selected' : '' ?>>Pending</option>
+      <option value="1" <?= (isset($_GET['status']) && $_GET['status'] === 'Approved') ? 'selected' : '' ?>>Approved</option>
+      <option value="2" <?= (isset($_GET['status']) && $_GET['status'] === 'Rejected') ? 'selected' : '' ?>>Rejected</option>
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+   <!-- Export Button -->
+  <button onclick="exportTableToExcel('teamTable', 'Hackathon_Teams')" style="margin-top:10px; margin-bottom:10px;">
+    Export to Excel
+  </button>
+
+<div class="container-fluid my-5">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+        <!-- Members Card -->
+        <div class="card mt-4 shadow">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Member List</h5>
+            </div>
+            <div class="card-body">
+                <?php if ($result->num_rows > 0): ?>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Photo</th>
+                                <th>Admit Card</th>
+                                <th>Member Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Symbol No</th>
+                                <th>Team Name</th>
+                                <th>College</th>
+                                <th>Team Status</th>
+                                <th>Team created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $i = 1;
+                            while ($row = $result->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?= $i++ ?></td>
+                                    <td>
+                                        <img src="<?= htmlspecialchars($row['photo']) ?>" alt="Photo" width="70"
+                                            class="img-thumbnail">
+                                    </td>
+                                    <td>
+                                        <img src="<?= htmlspecialchars($row['admit_card']) ?>" alt="admin card" width="70"
+                                            class="img-thumbnail">
+                                    </td>
+                                    <td><?= htmlspecialchars($row['member_name']) ?></td>
+                                    <td><?= htmlspecialchars($row['email']) ?></td>
+                                    <td><?= htmlspecialchars($row['phone']) ?></td>
+                                    <td><?= htmlspecialchars($row['symbol_no']) ?></td>
+                                    <td><?= htmlspecialchars($row['team_name']) ?></td>
+                                    <td><?= htmlspecialchars($row['college']) ?></td>
+                                    <td><?= getStatusLabel($row['status']) ?></td>
+                                    <td><?= htmlspecialchars($row['created_at']) ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p class="text-muted mb-0">No members found.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-5 mb-3 text-center text-muted">
+            <hr>
+            &copy; <?= date('Y') ?> Hackathon Admin Panel
+        </footer>
+    </main>
+</div>
+
+<!-- Export to Excel Script -->
+<script>
+function exportTableToExcel(tableID, filename = '') {
+  var downloadLink;
+  var dataType = 'application/vnd.ms-excel';
+  var tableSelect = document.getElementById(tableID);
+  var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+  filename = filename ? filename + '.xls' : 'export_data.xls';
+
+  // Create download link element
+  downloadLink = document.createElement("a");
+
+  document.body.appendChild(downloadLink);
+
+  if (navigator.msSaveOrOpenBlob) {
+    var blob = new Blob(['\ufeff', tableHTML], {
+      type: dataType
+    });
+    navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    // Create a link to the file
+    downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+    // Setting the file name
+    downloadLink.download = filename;
+
+    // Triggering the function
+    downloadLink.click();
+  }
+}
+</script>
+
+</body>
+
+</html>

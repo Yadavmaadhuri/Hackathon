@@ -1,9 +1,15 @@
 <?php
+session_start();
+include '../config/database.php';
+
+if (!isset($_SESSION['id'])) {
+  header("Location: login");
+  exit();
+}
+
 include_once('header.php');
 include_once('sidebar.php');
 include_once('topbar.php');
-
-include '../config/database.php';
 
 ?>
 
@@ -78,6 +84,19 @@ $recentMembers = $conn->query("SELECT * FROM team_members ORDER BY id DESC LIMIT
 $recentApprovedTeams = $conn->query("SELECT * FROM teams WHERE status = 1 ORDER BY created_at DESC LIMIT 5");
 $recentRejectedTeams = $conn->query("SELECT * FROM teams WHERE status = 2 ORDER BY id DESC LIMIT 5");
 
+
+function getStatusLabel($status)
+{
+  switch ($status) {
+    case 1:
+      return '<span class="badge bg-success">Approved</span>';
+    case 2:
+      return '<span class="badge bg-danger">Rejected</span>';
+    default:
+      return '<span class="badge bg-warning text-dark">Pending</span>';
+  }
+}
+
 ?>
 
 
@@ -150,7 +169,7 @@ $recentRejectedTeams = $conn->query("SELECT * FROM teams WHERE status = 2 ORDER 
             <?php while ($team = $recentTeams->fetch_assoc()): ?>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <?= htmlspecialchars($team['name']) ?>
-                <span class="badge bg-secondary">ID: <?= $team['id'] ?></span>
+                <?= getStatusLabel($team['status']) ?>
               </li>
             <?php endwhile; ?>
           </ul>

@@ -225,35 +225,34 @@
     });
 
 
-    // backend duplicacy check 
-    // for team name
-    document.getElementById("teamName").addEventListener("input", async function (params) {
-      const teamName = this.value.trim();
-      const errorElement = document.getElementById("teamNameError");
+// backend duplicacy check 
+// for team name
+document.getElementById("teamName").addEventListener("input", async function () {
+  const teamName = this.value.trim();
+  const errorElement = document.getElementById("teamNameError");
 
+  // Reset message if input is empty
+  if (teamName.length === 0) {
+    errorElement.textContent = "";
+    errorElement.style.color = "";
+    return;
+  }
 
-      // Don't send request if input is empty
-      if (teamName.length === 0) {
-        errorElement.textContent = "";
-        errorElement.style.color = ""; // reset color 
+  try {
+    let response = await fetch(`submit.php?team_name=${encodeURIComponent(teamName)}`);
+    let data = await response.json();
 
-        return;
-      }
-
-      try {
-        let response = await fetch(`submit.php?team_Name=${encodeURIComponent(teamName)}`)
-        let data = await response.json()
-        if (data.exists) {
-          errorElement.textContent = "Team name already exists.";
-          errorElement.style.color = "red"; // red for error
-        } else {
-          errorElement.textContent = "Team name is available.";
-          errorElement.style.color = "green"; // green for available
-        }
-      } catch (error) {
-        console.error("Error checking team name:", error);
-      }
-    });
+    if (data.exists) {
+      errorElement.textContent = "Team name already exists.";
+      errorElement.style.color = "red";
+    } else {
+      errorElement.textContent = ""; // No message if available
+      errorElement.style.color = "";
+    }
+  } catch (error) {
+    console.error("Error checking team name:", error);
+  }
+});
 
 
     function checkMemberLimit() {

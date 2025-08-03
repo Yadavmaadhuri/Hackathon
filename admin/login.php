@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($row = mysqli_fetch_assoc($result)) {
         if (password_verify($password_input, $row['password'])) {
             // Login success
-            $_SESSION['admin_id'] = $row['id'];
+            $_SESSION['id'] = $row['id'];
             $_SESSION['admin_email'] = $row['email'];
             header("Location: dashboard");
             exit();

@@ -1,11 +1,14 @@
 <?php
+session_start();
 include_once('header.php');
 include_once('sidebar.php');
 include_once('topbar.php');
 
 include '../config/database.php';
-
-
+if (!isset($_SESSION['id'])) {
+    header("Location: login");
+    exit();
+}
 
 $team_id = $_GET['team_id'] ?? null;
 if (!$team_id) {

@@ -1,7 +1,12 @@
 <?php
 // process_status.php
 // include 'db_connect.php';
+session_start();
 include '../config/database.php';
+if (!isset($_SESSION['id'])) {
+    header("Location: login");
+    exit();
+}
 
 
 $action = $_GET['action'] ?? '';

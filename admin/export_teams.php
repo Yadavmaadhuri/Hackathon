@@ -1,5 +1,10 @@
 <?php
+session_start();
 include '../config/database.php';
+if (!isset($_SESSION['id'])) {
+    header("Location: login");
+    exit();
+}
 
 // UTF-8 BOM to fix encoding issues in Excel
 echo "\xEF\xBB\xBF";

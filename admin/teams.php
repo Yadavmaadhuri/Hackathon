@@ -1,7 +1,13 @@
 <?php
+session_start();
 include_once('header.php');
 include_once('sidebar.php');
 include_once('topbar.php');
+
+if (!isset($_SESSION['id'])) {
+    header("Location: login");
+    exit();
+}
 ?>
 
 <!-- Main Content -->
@@ -68,7 +74,7 @@ include_once('topbar.php');
               <td>" . htmlspecialchars($row['college']) . "</td>
               <td>{$statusText}</td>
               <td class='action-link'>
-                  <a href='view_team.php?team_id={$row['id']}' class='btn btn-outline-primary '><img src='../assets/svg/eye.svg'></a>
+                  <a href='view_team.php?team_id={$row['id']}' class='btn btn-outline-primary '><img src='../assets/images/eye.sv5-g'></a>
               </td>
           </tr>";
       }

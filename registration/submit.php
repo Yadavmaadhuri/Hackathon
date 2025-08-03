@@ -1,11 +1,10 @@
 <?php
 include '../config/database.php'; 
-
 //  Handle GET request: Check if team name exists
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['team_name'])) {
     $teamName = $_GET['team_name'] ?? '';    
 
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM teams WHERE team_name = ?");
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM teams WHERE name = ?");
     $stmt->bind_param("s", $teamName);
     $stmt->execute();
     $stmt->bind_result($count);
@@ -71,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!preg_match("/^[a-zA-Z\s]+$/", $name) ||
                 !filter_var($email, FILTER_VALIDATE_EMAIL) ||
                 !preg_match("/^(97|98)\d{8}$/", $phone) ||
-                !preg_match("/^\d{12}$/", $symbol)) {
+                !preg_match("/^\d{8}$/", $symbol)) {
                 throw new Exception("Invalid data for member #" . ($i + 1));
             }
 

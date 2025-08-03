@@ -1,7 +1,12 @@
 <?php
+session_start();
 header('Content-Type: application/json');
 
 include '../config/database.php';
+if (!isset($_SESSION['id'])) {
+    header("Location: login");
+    exit();
+}
 
 // Check DB connection
 if (!$conn) {
