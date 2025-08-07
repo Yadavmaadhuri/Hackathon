@@ -27,15 +27,14 @@ if (!isset($_SESSION['id'])) {
   </form>
 
   <!-- Export Button -->
-  <button onclick="exportTableToExcel('teamTable', 'Hackathon_Teams')" style="margin-top:10px; margin-bottom:10px;">
+  <a href="export.php" style="margin-top:10px; margin-bottom:10px;">
     Export to Excel
-  </button>
+</a>
 
   <table id="teamTable">
     <tr>
       <th>Team ID</th>
       <th>Team Name</th>
-      <th>College</th>
       <th>Status</th>
       <th>Actions</th>
     </tr>
@@ -71,10 +70,9 @@ if (!isset($_SESSION['id'])) {
         echo "<tr>
               <td>{$row['id']}</td>
               <td>" . htmlspecialchars($row['name']) . "</td>
-              <td>" . htmlspecialchars($row['college']) . "</td>
               <td>{$statusText}</td>
               <td class='action-link'>
-                  <a href='view_team.php?team_id={$row['id']}' class='btn btn-outline-primary '><img src='../assets/images/eye.sv5-g'></a>
+                  <a href='view_team.php?team_id={$row['id']}' class='btn btn-outline-primary '><img src='../assets/images/eye.svg' style='width:25px;'></a>
               </td>
           </tr>";
       }
@@ -119,5 +117,5 @@ function exportTableToExcel(tableID, filename = '') {
 </script>
 
 <?php
-include_once('footer.php');
+// include_once('footer.php');
 ?>

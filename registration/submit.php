@@ -1,8 +1,13 @@
 <?php
-include '../config/database.php'; 
-//  Handle GET request: Check if team name exists
+include '../config/database.php';
+
+// Handle GET request: Check if team name exists
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['team_name'])) {
-    $teamName = $_GET['team_name'] ?? '';    
+    $teamName = trim($_GET['team_name']);
+    if (empty($teamName)) {
+        echo json_encode(['exists' => false]);
+        exit;
+    }
 
     $stmt = $conn->prepare("SELECT COUNT(*) FROM teams WHERE name = ?");
     $stmt->bind_param("s", $teamName);
@@ -12,14 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['team_name'])) {
     $stmt->close();
 
     echo json_encode(['exists' => $count > 0]);
-    exit; // ⬅ Stop here so POST logic doesn’t run
+    exit;
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['team_name'], $_POST['college_name']) || empty($_POST['team_name']) || empty($_POST['college_name'])) {
         http_response_code(400);
-        echo json_encode(["error" => "Team Name and College Name are required."]);
+        echo json_encode(["error" => "Team Name are required."]);
         exit;
     }
 
@@ -44,15 +48,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     @mkdir('../uploads/admit_cards', 0777, true);
 
     $conn->begin_transaction();
+    $uploadedFiles = []; // Track uploaded files for cleanup on failure
 
     try {
-        $stmt = $conn->prepare("INSERT INTO teams (name, college) VALUES (?, ?)");
-        $stmt->bind_param("ss", $teamName, $collegeName);
+        // Check for duplicate team name
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM teams WHERE name = ?");
+        $stmt->bind_param("s", $teamName);
+        $stmt->execute();
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        $stmt->close();
+        if ($count > 0) {
+            throw new Exception("Team name already exists.");
+        }
+
+        // Insert team
+        $stmt = $conn->prepare("INSERT INTO teams (name) VALUES (?)");
+        $stmt->bind_param("s", $teamName);
         $stmt->execute();
         $teamId = $stmt->insert_id;
         $stmt->close();
 
-        $memberStmt = $conn->prepare("INSERT INTO team_members (team_id, member_name, email, phone, photo, admit_card, symbol_no) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        // Prepare member insertion
+        $memberStmt = $conn->prepare("INSERT INTO team_members (team_id, member_name, college, email, phone, photo, admit_card, symbol_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $memberStmt->bind_param("isssssss", $teamId, $name, $college, $email, $phone, $photoPath, $admitPath, $symbol);
 
         foreach ($members as $i => $member) {
             $photoKey = 'photo_' . $i;
@@ -66,13 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($member['email']);
             $phone = trim($member['phone']);
             $symbol = trim($member['symbol']);
+            $college = trim($member['college']);
 
-            if (!preg_match("/^[a-zA-Z\s]+$/", $name) ||
-                !filter_var($email, FILTER_VALIDATE_EMAIL) ||
-                !preg_match("/^(97|98)\d{8}$/", $phone) ||
-                !preg_match("/^\d{8}$/", $symbol)) {
-                throw new Exception("Invalid data for member #" . ($i + 1));
-            }
+            // if (
+            //     !preg_match("/^[a-zA-Z\s]+$/", $name) ||
+            //     !preg_match("/^[a-zA-Z\s]+$/", $college) ||
+            //     !filter_var($email, FILTER_VALIDATE_EMAIL) ||
+            //     !preg_match("/^(97|98)\d{8}$/", $phone) ||
+            //     !preg_match("/^\d{8}$/", $symbol)
+            // ) {
+            //     throw new Exception("Invalid data for member #" . ($i + 1));
+            // }
 
             $photoTmp = $_FILES[$photoKey]['tmp_name'];
             $admitTmp = $_FILES[$admitKey]['tmp_name'];
@@ -81,13 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
             $photoMime = mime_content_type($photoTmp);
             $admitMime = mime_content_type($admitTmp);
-            $maxSize = 2 * 1024 * 1024;
+            $maxSize = 200 * 1024; // 200KB
 
             if (!in_array($photoMime, $allowedMimeTypes) || !in_array($admitMime, $allowedMimeTypes)) {
                 throw new Exception("Invalid file type for member #" . ($i + 1));
             }
             if ($_FILES[$photoKey]['size'] > $maxSize || $_FILES[$admitKey]['size'] > $maxSize) {
-                throw new Exception("File size exceeds limit for member #" . ($i + 1));
+                throw new Exception("File size exceeds 200KB limit for member #" . ($i + 1));
             }
 
             $photoName = uniqid("photo_") . "_" . basename($_FILES[$photoKey]['name']);
@@ -100,7 +123,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Failed to upload files for member #" . ($i + 1));
             }
 
-            $memberStmt->bind_param("ississi", $teamId, $name, $email, $phone, $photoPath, $admitPath, $symbol);
+            $uploadedFiles[] = $photoPath;
+            $uploadedFiles[] = $admitPath;
+
             $memberStmt->execute();
 
             if ($memberStmt->errno === 1062) {
@@ -115,6 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } catch (Exception $e) {
         $conn->rollback();
+        // Clean up uploaded files
+        foreach ($uploadedFiles as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
         http_response_code(500);
         echo json_encode(["error" => $e->getMessage()]);
     }
@@ -122,3 +153,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(405);
     echo json_encode(["error" => "Invalid request method."]);
 }
+?>

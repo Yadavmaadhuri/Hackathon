@@ -74,6 +74,7 @@ $memberQuery = $conn->query("SELECT * FROM team_members WHERE team_id = $team_id
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>College</th>
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Email</th>
@@ -83,6 +84,7 @@ $memberQuery = $conn->query("SELECT * FROM team_members WHERE team_id = $team_id
                             <?php while ($member = $memberQuery->fetch_assoc()): ?>
                                 <tr>
                                     <td><?= $member['id'] ?></td>
+                                    <td><?= htmlspecialchars($member['college']) ?></td>
                                     <td><?= htmlspecialchars($member['member_name']) ?></td>
                                     <td><?= htmlspecialchars($member['phone']) ?></td>
                                     <td><?= htmlspecialchars($member['email']) ?></td>

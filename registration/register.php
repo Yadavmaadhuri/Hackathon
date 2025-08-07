@@ -112,12 +112,12 @@
             <input type="text" class="form-control" id="teamName" name="team_name" required>
             <div id="teamNameError" class="error"></div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 d-none">
             <label for="collegeName" class="form-label">College Name</label>
-            <input type="text" class="form-control" id="collegeName" name="college_name" required>
+            <input type="text" class="form-control" id="collegeName" name="college_name" value="HDC">
             <div id="collegeNameError" class="error"></div>
           </div>
-          <div class="col-md-4 d-flex align-items-end justify-content-end mt-2 mt-md-2" id="addMemberBtnDiv">
+          <div class="col-md-8 d-flex align-items-end justify-content-end mt-2 mt-md-2" id="addMemberBtnDiv">
             <button type="button" class="btn btn-theme" data-bs-toggle="modal" data-bs-target="#addMemberModal">
               <i class="bi bi-person-plus-fill"></i> Add Member
             </button>
@@ -134,8 +134,12 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Uploads & Action</th>
+                <th>College</th>
+                <th>Photo</th>
+                <th>Admit Card</th>
+                <th>Action</th>
               </tr>
+
             </thead>
             <tbody></tbody>
           </table>
@@ -161,12 +165,27 @@
           <form id="memberForm">
             <input type="number" class="form-control mb-2" id="mSymbol" placeholder="Symbol No." required>
             <div id="mSymbolError" class="error"></div>
+
             <input type="text" class="form-control mb-2" id="mName" placeholder="Full Name" required>
             <div id="mNameError" class="error"></div>
+
             <input type="email" class="form-control mb-2" id="mEmail" placeholder="Email" required>
             <div id="mEmailError" class="error"></div>
+
             <input type="text" class="form-control mb-2" id="mPhone" placeholder="Phone" required>
             <div id="mPhoneError" class="error"></div>
+
+            <input type="text" class="form-control mb-2" id="mCollege" placeholder="College Name" required>
+            <div id="mCollegeError" class="error"></div>
+
+            <label>Photo Card (max 200KB)</label>
+            <input type="file" class="form-control mb-2" id="mPhoto" accept="image/*" required>
+            <img class="preview" id="photoPreview" style="display:none;" />
+
+            <label>Admit Card (max 200KB)</label>
+            <input type="file" class="form-control mb-2" id="mAdmit" accept="image/*" required>
+            <img class="preview" id="admitPreview" style="display:none;" />
+
             <div class="text-end">
               <button type="button" class="btn btn-theme" onclick="addMember()">Add to List</button>
             </div>
@@ -225,34 +244,34 @@
     });
 
 
-// backend duplicacy check 
-// for team name
-document.getElementById("teamName").addEventListener("input", async function () {
-  const teamName = this.value.trim();
-  const errorElement = document.getElementById("teamNameError");
+    // backend duplicacy check 
+    // for team name
+    document.getElementById("teamName").addEventListener("input", async function () {
+      const teamName = this.value.trim();
+      const errorElement = document.getElementById("teamNameError");
 
-  // Reset message if input is empty
-  if (teamName.length === 0) {
-    errorElement.textContent = "";
-    errorElement.style.color = "";
-    return;
-  }
+      // Reset message if input is empty
+      if (teamName.length === 0) {
+        errorElement.textContent = "";
+        errorElement.style.color = "";
+        return;
+      }
 
-  try {
-    let response = await fetch(`submit.php?team_name=${encodeURIComponent(teamName)}`);
-    let data = await response.json();
+      try {
+        let response = await fetch(`submit.php?team_name=${encodeURIComponent(teamName)}`);
+        let data = await response.json();
 
-    if (data.exists) {
-      errorElement.textContent = "Team name already exists.";
-      errorElement.style.color = "red";
-    } else {
-      errorElement.textContent = ""; // No message if available
-      errorElement.style.color = "";
-    }
-  } catch (error) {
-    console.error("Error checking team name:", error);
-  }
-});
+        if (data.exists) {
+          errorElement.textContent = "Team name already exists.";
+          errorElement.style.color = "red";
+        } else {
+          errorElement.textContent = ""; // No message if available
+          errorElement.style.color = "";
+        }
+      } catch (error) {
+        console.error("Error checking team name:", error);
+      }
+    });
 
 
     function checkMemberLimit() {
@@ -262,57 +281,132 @@ document.getElementById("teamName").addEventListener("input", async function () 
 
 
 
-    function addMember() {
+    // function addMember() {
 
-      if (memberCount >= 4) {
-        // Swal.fire("Limit Reached", "You can only add up to 4 members.", "warning");
-        return;
-      }
+    //   if (memberCount >= 4) {
+    //     // Swal.fire("Limit Reached", "You can only add up to 4 members.", "warning");
+    //     return;
+    //   }
+    //   const symbol = document.getElementById("mSymbol").value.trim();
+    //   const name = document.getElementById("mName").value.trim();
+    //   const email = document.getElementById("mEmail").value.trim();
+    //   const phone = document.getElementById("mPhone").value.trim();
+
+    //   if (!symbolPattern.test(symbol) || !namePattern.test(name) || !emailPattern.test(email) || !phonePattern.test(phone)) {
+    //     Swal.fire("Error", "Please correct the input fields.", "error");
+    //     return;
+    //   }
+
+
+
+    //   memberCount++;
+    //   const table = document.getElementById("memberTable").querySelector("tbody");
+
+    //   const row = document.createElement("tr");
+    //   row.innerHTML = `
+    //     <td>${memberCount}</td>
+    //     <td>${symbol}</td>
+    //     <td>${name}</td>
+    //     <td>${email}</td>
+    //     <td>${phone}</td>
+    //     <td>
+    //       <label>Photo Card</label>
+    //       <input type="file" name="photo_${memberCount - 1}" class="form-control mb-1 photo-input" required />
+    //       <img class="preview photo-preview" style="display:none;" />
+    //       <label>Admit Card</label>
+    //       <input type="file" name="admit_${memberCount - 1}" class="form-control mb-1 admit-input" required />
+    //       <img class="preview admit-preview" style="display:none;" />
+    //       <button class="btn btn-danger btn-sm mt-1" onclick="removeMember(this)">Remove</button>
+    //     </td>
+    //   `;
+
+    //   table.appendChild(row);
+
+    //   document.getElementById("memberForm").reset();
+    //   bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
+
+    //   if (memberCount === 4) {
+    //     document.getElementById("registerbtn").style.display = "inline-block";
+
+    //   }
+
+    //   checkMemberLimit(); // Add this line
+    // }
+
+    function addMember() {
+      if (memberCount >= 4) return;
+
       const symbol = document.getElementById("mSymbol").value.trim();
       const name = document.getElementById("mName").value.trim();
       const email = document.getElementById("mEmail").value.trim();
       const phone = document.getElementById("mPhone").value.trim();
+      const college = document.getElementById("mCollege").value.trim();
+      const photoFile = document.getElementById("mPhoto").files[0];
+      const admitFile = document.getElementById("mAdmit").files[0];
 
-      if (!symbolPattern.test(symbol) || !namePattern.test(name) || !emailPattern.test(email) || !phonePattern.test(phone)) {
-        Swal.fire("Error", "Please correct the input fields.", "error");
+      if (!symbolPattern.test(symbol) || !namePattern.test(name) || !emailPattern.test(email) ||
+        !phonePattern.test(phone) || !namePattern.test(college) || !photoFile || !admitFile) {
+        Swal.fire("Error", "Please correct all input fields.", "error");
         return;
       }
 
+      if (photoFile.size > 200 * 1024 || admitFile.size > 200 * 1024) {
+        Swal.fire("File Too Large", "Each image must be ≤ 200KB.", "warning");
+        return;
+      }
 
+      const reader1 = new FileReader();
+      const reader2 = new FileReader();
 
-      memberCount++;
-      const table = document.getElementById("memberTable").querySelector("tbody");
+      reader1.onload = function (e1) {
+        reader2.onload = function (e2) {
+          memberCount++;
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
+          const table = document.getElementById("memberTable").querySelector("tbody");
+          const row = document.createElement("tr");
+          row.innerHTML = `
         <td>${memberCount}</td>
         <td>${symbol}</td>
         <td>${name}</td>
         <td>${email}</td>
         <td>${phone}</td>
+        <td>${college}</td>
+        <td><img src="${e1.target.result}" class="preview" /></td>
+        <td><img src="${e2.target.result}" class="preview" /></td>
         <td>
-          <label>Photo Card</label>
-          <input type="file" name="photo_${memberCount - 1}" class="form-control mb-1 photo-input" required />
-          <img class="preview photo-preview" style="display:none;" />
-          <label>Admit Card</label>
-          <input type="file" name="admit_${memberCount - 1}" class="form-control mb-1 admit-input" required />
-          <img class="preview admit-preview" style="display:none;" />
-          <button class="btn btn-danger btn-sm mt-1" onclick="removeMember(this)">Remove</button>
+          <input type="file" name="photo_${memberCount - 1}" style="display:none;" />
+          <input type="file" name="admit_${memberCount - 1}" style="display:none;" />
+          <button class="btn btn-danger btn-sm" onclick="removeMember(this)">Remove</button>
         </td>
       `;
 
-      table.appendChild(row);
+          table.appendChild(row);
 
-      document.getElementById("memberForm").reset();
-      bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
+          row.querySelector(`input[name="photo_${memberCount - 1}"]`).files = createFileList(photoFile);
+          row.querySelector(`input[name="admit_${memberCount - 1}"]`).files = createFileList(admitFile);
 
-      if (memberCount === 4) {
-        document.getElementById("registerbtn").style.display = "inline-block";
+          document.getElementById("memberForm").reset();
+          document.getElementById("photoPreview").style.display = "none";
+          document.getElementById("admitPreview").style.display = "none";
 
-      }
-
-      checkMemberLimit(); // Add this line
+          bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
+          if (memberCount === 4) {
+            document.getElementById("registerbtn").style.display = "inline-block";
+          }
+          checkMemberLimit();
+        };
+        reader2.readAsDataURL(admitFile);
+      };
+      reader1.readAsDataURL(photoFile);
     }
+
+    // Create FileList object from single File
+    function createFileList(file) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      return dataTransfer.files;
+    }
+
 
     function removeMember(button) {
       button.closest("tr").remove();
