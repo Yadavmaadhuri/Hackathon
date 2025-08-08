@@ -11,13 +11,21 @@ include '../config/database.php';
 include_once('header.php');
 include_once('sidebar.php');
 include_once('topbar.php');
-?>
+// var_dump($_POST['member_id']); 
+// exit;
 
+?>
+<style>
+    .error {
+        color: red;
+        font-size: 0.875em;
+    }
+</style>
 <div class="main">
     <h2>Hackathon Team & Member List</h2>
 
     <form method="GET">
-        <input type="text" name="search" placeholder="Search team, member or college"
+        <input type="text" name="search" placeholder="Search"
             value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>" />
         <select name="status">
             <option value="">All</option>
@@ -50,6 +58,7 @@ include_once('topbar.php');
                 <th>Admit Card</th>
                 <th>Status</th>
                 <th>Created at</th>
+                <th>Action</th>
                 </tr>
         </thead>
         <?php
@@ -57,7 +66,7 @@ include_once('topbar.php');
         // Build query with JOIN
         $query = "
     SELECT t.id AS team_id, t.name AS team_name, t.status,
-    tm.college, tm.member_name, tm.email, tm.phone, tm.symbol_no, tm.photo, tm.admit_card, tm.added_at
+    tm.id AS id, tm.college, tm.member_name, tm.email, tm.phone, tm.symbol_no, tm.photo, tm.admit_card, tm.added_at
     FROM teams t
     LEFT JOIN team_members tm ON t.id = tm.team_id
     WHERE 1=1
@@ -95,14 +104,16 @@ include_once('topbar.php');
                 } else {
                     $statusText = '<span class="badge bg-secondary">Unknown</span>';
                 }
-                $id++;
-
+                // $id++;
+        
 
                 // Inside while loop
                 $rowJson = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
 
+                $rowJson = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
+
                 echo "<tr>
-                <td>{$id}</td>
+                <td>{$row['id']}</td>
                 <td>" . htmlspecialchars($row['team_name']) . "</td>
                 <td><img src='" . htmlspecialchars($row['photo']) . "' class='rounded-circle' style='border:2px solid #817d7dff; width: 60px !important; height: 60px !important; object-fit: fill;' alt='" . htmlspecialchars($row['member_name']) . "'></td>
                 <td>" . htmlspecialchars($row['member_name']) . "</td>
@@ -113,7 +124,15 @@ include_once('topbar.php');
                 <td><img src='" . htmlspecialchars($row['admit_card']) . "' width='70' height='70' class='border border-dark p-1'></td>
                 <td>{$statusText}</td>
                 <td>" . htmlspecialchars(date('Y-m-d', strtotime($row['added_at']))) . "</td>
-                <td><button class='btn btn-sm btn-warning' onclick='openEditModal({$rowJson})'>Edit</button></td>
+                <td>
+                    <button class='btn btn-link p-0 text-primary'
+                            data-id='{$row['id']}'
+                            onclick='openEditModal({$rowJson})'>
+                        <i class='fas fa-edit'></i>
+                    </button>
+                </td>
+
+
             </tr>";
 
             }
@@ -123,42 +142,152 @@ include_once('topbar.php');
         ?>
     </table>
 
+
     <!-- Edit Member Modal -->
+    <!-- Modal HTML -->
     <div id="editModal"
         style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:9999;">
         <div
-            style="background:#fff; margin:10% auto; padding:20px; width:500px; border-radius:10px; position:relative;">
+            style="background:#fff; margin:5% auto; padding:20px; width:500px; height:90vh; overflow-y:auto; border-radius:10px; position:relative;">
+
             <span onclick="closeEditModal()"
                 style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:20px;">&times;</span>
             <h3>Edit Member</h3>
-            <form id="editForm" method="POST" action="member_edit.php">
-                <input type="hidden" name="team_id" id="editTeamId">
-                <input type="hidden" name="symbol_no_old" id="editOldSymbol">
+            <form id="editForm" method="POST" action="member_edit.php" enctype="multipart/form-data" novalidate>
+                <!-- <input type="hidden" name="team_id" id="editTeamId"> -->
+                <input type="hidden" name="id" id="editMemberId">
 
-                <label>Member Name:</label>
-                <input type="text" name="member_name" id="editMemberName" required><br><br>
+                <input type="number" class="form-control mb-2" id="mSymbol" name="symbol_no" placeholder="Symbol No."
+                    required>
+                <div id="mSymbolError" class="error"></div>
 
-                <label>Email:</label>
-                <input type="email" name="email" id="editEmail" required><br><br>
+                <input type="text" class="form-control mb-2" id="mName" name="member_name" placeholder="Full Name"
+                    required>
+                <div id="mNameError" class="error"></div>
 
-                <label>Phone:</label>
-                <input type="text" name="phone" id="editPhone" required><br><br>
+                <input type="email" class="form-control mb-2" id="mEmail" name="email" placeholder="Email" required>
+                <div id="mEmailError" class="error"></div>
 
-                <label>College:</label>
-                <input type="text" name="college" id="editCollege" required><br><br>
+                <input type="text" class="form-control mb-2" id="mPhone" name="phone" placeholder="Phone" required>
+                <div id="mPhoneError" class="error"></div>
 
-                <label>Symbol No:</label>
-                <input type="text" name="symbol_no" id="editSymbol" required><br><br>
+                <input type="text" class="form-control mb-2" id="mCollege" name="college" placeholder="College Name"
+                    required>
+                <div id="mCollegeError" class="error"></div>
 
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <label>Photo Card (max 200KB)</label>
+                <input type="file" class="form-control mb-2" id="mPhoto" name="photo" accept="image/*">
+                <img class="preview" id="photoPreview"
+                    style="display:none; width:80px; height:80px; object-fit:cover;" />
+
+                <label>Admit Card (max 200KB)</label>
+                <input type="file" class="form-control mb-2" id="mAdmit" name="admit_card" accept="image/*">
+                <img class="preview" id="admitPreview"
+                    style="display:none; width:80px; height:80px; object-fit:cover;" />
+
+                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
             </form>
+
         </div>
     </div>
+
+
 </div> <!-- Closing tag of your main div -->
 
-</div>
+
 
 <script>
+    const namePattern = /^[a-zA-Z\s]+$/;
+    const symbolPattern = /^\d{8}$/;
+    const phonePattern = /^(98|97)\d{8}$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    document.getElementById("mName").addEventListener("input", function () {
+        document.getElementById("mNameError").textContent = namePattern.test(this.value) ? "" : "Only letters and spaces allowed.";
+    });
+    document.getElementById("mSymbol").addEventListener("input", function () {
+        document.getElementById("mSymbolError").textContent = symbolPattern.test(this.value) ? "" : "Must be 8 digits.";
+    });
+    document.getElementById("mPhone").addEventListener("input", function () {
+        document.getElementById("mPhoneError").textContent = phonePattern.test(this.value) ? "" : "Invalid phone format.";
+    });
+    document.getElementById("mEmail").addEventListener("input", function () {
+        document.getElementById("mEmailError").textContent = emailPattern.test(this.value) ? "" : "Invalid email format.";
+    });
+    document.getElementById("mCollege").addEventListener("input", function () {
+        document.getElementById("mCollegeError").textContent = namePattern.test(this.value) ? "" : "Only letters and spaces allowed.";
+    });
+
+    document.getElementById("mPhoto").addEventListener("change", function () {
+        previewImage(this, "photoPreview");
+    });
+    document.getElementById("mAdmit").addEventListener("change", function () {
+        previewImage(this, "admitPreview");
+    });
+
+
+
+    function previewImage(input, previewId) {
+        const file = input.files[0];
+        const preview = document.getElementById(previewId);
+        if (file) {
+            if (file.size > 200 * 1024) {
+                alert("File size should be less than 200KB");
+                input.value = "";
+                preview.style.display = "none";
+            } else {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
+    document.getElementById("editForm").addEventListener("submit", function (e) {
+        const nameValid = namePattern.test(mName.value);
+        const symbolValid = symbolPattern.test(mSymbol.value);
+        const phoneValid = phonePattern.test(mPhone.value);
+        const emailValid = emailPattern.test(mEmail.value);
+        const collegeValid = namePattern.test(mCollege.value);
+
+        if (!nameValid || !symbolValid || !phoneValid || !emailValid || !collegeValid) {
+            alert("Please fix validation errors before submitting.");
+            e.preventDefault();
+        }
+    });
+
+    // Show modal with pre-filled data
+    function openEditModal(data) {
+        document.getElementById('editModal').style.display = 'block';
+
+        // document.getElementById('editTeamId').value = data.team_id;
+        document.getElementById('editMemberId').value = data.id;
+
+        document.getElementById('mSymbol').value = data.symbol_no;
+        document.getElementById('mName').value = data.member_name;
+        document.getElementById('mEmail').value = data.email;
+        document.getElementById('mPhone').value = data.phone;
+        document.getElementById('mCollege').value = data.college;
+
+        document.getElementById('photoPreview').src = data.photo;
+        document.getElementById('photoPreview').style.display = 'block';
+
+        document.getElementById('admitPreview').src = data.admit_card;
+        document.getElementById('admitPreview').style.display = 'block';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+
+
+    // edit section validation end
+
+
     function exportTableToExcel(tableID, filename = '') {
         const table = document.getElementById(tableID);
         const rows = table.rows;
@@ -188,26 +317,5 @@ include_once('topbar.php');
             document.body.removeChild(link);
         }
     }
-
-
-
-    //   for edit form
-    function openEditModal(data) {
-        document.getElementById('editModal').style.display = 'block';
-
-        document.getElementById('editTeamId').value = data.team_id;
-        document.getElementById('editOldSymbol').value = data.symbol_no;
-
-        document.getElementById('editMemberName').value = data.member_name;
-        document.getElementById('editEmail').value = data.email;
-        document.getElementById('editPhone').value = data.phone;
-        document.getElementById('editCollege').value = data.college;
-        document.getElementById('editSymbol').value = data.symbol_no;
-    }
-
-    function closeEditModal() {
-        document.getElementById('editModal').style.display = 'none';
-    }
-
 
 </script>
