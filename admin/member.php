@@ -11,8 +11,7 @@ include '../config/database.php';
 include_once('header.php');
 include_once('sidebar.php');
 include_once('topbar.php');
-// var_dump($_POST['member_id']); 
-// exit;
+
 
 ?>
 <style>
@@ -44,6 +43,55 @@ include_once('topbar.php');
         Export to Excel
     </button>
 
+    <?php
+    $id = 0;
+
+    // ===== PAGINATION SETTINGS =====
+    $limit = 10; // rows per page
+    $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+    if ($page < 1)
+        $page = 1;
+    $offset = ($page - 1) * $limit;
+
+    // ===== BASE QUERY =====
+    $baseQuery = "
+        SELECT t.id AS team_id, t.name AS team_name, t.status,
+               tm.id AS id, tm.college, tm.member_name, tm.email, tm.phone,
+               tm.symbol_no, tm.photo, tm.admit_card, tm.added_at
+        FROM teams t
+        LEFT JOIN team_members tm ON t.id = tm.team_id
+        WHERE 1=1
+    ";
+
+    // Search filter
+    if (!empty($_GET['search'])) {
+        $search = $conn->real_escape_string($_GET['search']);
+        $baseQuery .= " AND (
+            t.name LIKE '%$search%' OR
+            tm.college LIKE '%$search%' OR
+            tm.member_name LIKE '%$search%' OR
+            tm.email LIKE '%$search%' OR
+            tm.phone LIKE '%$search%' OR
+            tm.symbol_no LIKE '%$search%'
+        )";
+    }
+
+    // Status filter
+    if (isset($_GET['status']) && $_GET['status'] !== '') {
+        $status = (int) $_GET['status'];
+        $baseQuery .= " AND t.status = $status";
+    }
+
+    // ===== COUNT TOTAL ROWS =====
+    $countResult = $conn->query($baseQuery);
+    $totalRows = $countResult ? $countResult->num_rows : 0;
+    $totalPages = ceil($totalRows / $limit);
+
+    // ===== FINAL QUERY WITH LIMIT =====
+    $query = $baseQuery . " ORDER BY t.id DESC LIMIT $limit OFFSET $offset";
+    $result = $conn->query($query);
+    ?>
+
     <table id="teamTable" border="1" cellpadding="8" cellspacing="0" class="table table-hover">
         <thead class="p-2">
             <t>
@@ -61,35 +109,8 @@ include_once('topbar.php');
                 <th>Action</th>
                 </tr>
         </thead>
+
         <?php
-        $id = 0;
-        // Build query with JOIN
-        $query = "
-    SELECT t.id AS team_id, t.name AS team_name, t.status,
-    tm.id AS id, tm.college, tm.member_name, tm.email, tm.phone, tm.symbol_no, tm.photo, tm.admit_card, tm.added_at
-    FROM teams t
-    LEFT JOIN team_members tm ON t.id = tm.team_id
-    WHERE 1=1
-";
-        if (!empty($_GET['search'])) {
-            $search = $conn->real_escape_string($_GET['search']);
-            $query .= " AND (
-        t.name LIKE '%$search%' OR
-        tm.college LIKE '%$search%' OR
-        tm.member_name LIKE '%$search%' OR
-        tm.email LIKE '%$search%' OR
-        tm.phone LIKE '%$search%' OR
-        tm.symbol_no LIKE '%$search%'
-    )";
-        }
-        if (isset($_GET['status']) && $_GET['status'] !== '') {
-            $status = (int) $_GET['status'];
-            $query .= " AND t.status = $status";
-        }
-        $query .= " ORDER BY t.id DESC";
-
-
-        $result = $conn->query($query);
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $statusText = '';
@@ -104,8 +125,8 @@ include_once('topbar.php');
                 } else {
                     $statusText = '<span class="badge bg-secondary">Unknown</span>';
                 }
-                // $id++;
-        
+                $id++;
+
 
                 // Inside while loop
                 $rowJson = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
@@ -113,7 +134,7 @@ include_once('topbar.php');
                 $rowJson = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
 
                 echo "<tr>
-                <td>{$row['id']}</td>
+                <td>$id</td>
                 <td>" . htmlspecialchars($row['team_name']) . "</td>
                 <td><img src='" . htmlspecialchars($row['photo']) . "' class='rounded-circle' style='border:2px solid #817d7dff; width: 60px !important; height: 60px !important; object-fit: fill;' alt='" . htmlspecialchars($row['member_name']) . "'></td>
                 <td>" . htmlspecialchars($row['member_name']) . "</td>
@@ -141,6 +162,37 @@ include_once('topbar.php');
         }
         ?>
     </table>
+
+    <!-- pagination  -->
+    <?php if ($totalPages > 1): ?>
+        <nav aria-label="Page navigation example" style="margin-top: 20px;">
+            <ul class="pagination">
+                <!-- Prev button -->
+                <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>"
+                        tabindex="-1">Previous</a>
+                </li>
+
+                <!-- Page numbers -->
+                <?php for ($p = 1; $p <= $totalPages; $p++): ?>
+                    <li class="page-item <?= ($p == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?<?php echo http_build_query(array_merge($_GET, ['page' => $p])); ?>">
+                            <?= $p ?>
+                        </a>
+                    </li>
+                <?php endfor; ?>
+
+                <!-- Next button -->
+                <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+                    <a class="page-link"
+                        href="?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>">Next</a>
+                </li>
+            </ul>
+        </nav>
+    <?php endif; ?>
+
+
+    <!-- pagination part ends -->
 
 
     <!-- Edit Member Modal -->

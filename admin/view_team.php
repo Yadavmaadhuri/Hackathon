@@ -57,7 +57,8 @@ $memberQuery = $conn->query("SELECT * FROM team_members WHERE team_id = $team_id
                 </p>
 
                 <?php if ($status == 0): ?>
-                    <button class="btn btn-success me-2" onclick="confirmAction('approve', <?= $team_id ?>)">Approve</button>
+                    <button class="btn btn-success me-2"
+                        onclick="confirmAction('approve', <?= $team_id ?>)">Approve</button>
                     <button class="btn btn-danger" onclick="confirmAction('reject', <?= $team_id ?>)">Reject</button>
                 <?php endif; ?>
             </div>
@@ -81,15 +82,20 @@ $memberQuery = $conn->query("SELECT * FROM team_members WHERE team_id = $team_id
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while ($member = $memberQuery->fetch_assoc()): ?>
-                                <tr>
-                                    <td><?= $member['id'] ?></td>
-                                    <td><?= htmlspecialchars($member['college']) ?></td>
-                                    <td><?= htmlspecialchars($member['member_name']) ?></td>
-                                    <td><?= htmlspecialchars($member['phone']) ?></td>
-                                    <td><?= htmlspecialchars($member['email']) ?></td>
-                                </tr>
-                            <?php endwhile; ?>
+                                <?php
+                                $sn = 1; // Start serial number
+                                while ($member = $memberQuery->fetch_assoc()):
+                                    ?>
+                                    <tr>
+                                        <td><?= $sn++ ?></td>
+                                        <td><?= htmlspecialchars($member['college']) ?></td>
+                                        <td><?= htmlspecialchars($member['member_name']) ?></td>
+                                        <td><?= htmlspecialchars($member['phone']) ?></td>
+                                        <td><?= htmlspecialchars($member['email']) ?></td>
+                                    </tr>
+                                <?php endwhile; ?>
+
+                            
                         </tbody>
                     </table>
                 <?php else: ?>
@@ -109,23 +115,24 @@ $memberQuery = $conn->query("SELECT * FROM team_members WHERE team_id = $team_id
 
 
 <script>
-function confirmAction(action, teamId) {
-    let actionText = action === 'approve' ? 'Approve' : 'Reject';
-    let confirmBtnColor = action === 'approve' ? '#198754' : '#dc3545';
+    function confirmAction(action, teamId) {
+        let actionText = action === 'approve' ? 'Approve' : 'Reject';
+        let confirmBtnColor = action === 'approve' ? '#198754' : '#dc3545';
 
-    Swal.fire({
-        title: `Are you sure you want to ${actionText} this team?`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: confirmBtnColor,
-        confirmButtonText: `Yes, ${actionText}`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = `process_status.php?action=${action}&team_id=${teamId}`;
-        }
-    });
-}
+        Swal.fire({
+            title: `Are you sure you want to ${actionText} this team?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: confirmBtnColor,
+            confirmButtonText: `Yes, ${actionText}`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `process_status.php?action=${action}&team_id=${teamId}`;
+            }
+        });
+    }
 </script>
 
 </body>
+
 </html>
