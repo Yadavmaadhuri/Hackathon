@@ -26,7 +26,8 @@ if (!preg_match('/^\d{8}$/', $symbol_no)) $errors[] = "Invalid Symbol No.";
 if (!preg_match('/^[a-zA-Z\s]+$/', $member_name)) $errors[] = "Invalid Name.";
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Invalid Email.";
 if (!preg_match('/^(97|98)\d{8}$/', $phone)) $errors[] = "Invalid Phone.";
-if (!preg_match('/^[a-zA-Z\s]+$/', $college)) $errors[] = "Invalid College.";
+if (!preg_match('/^[a-zA-Z\s\.\-]+$/', $college)) $errors[] = "Invalid College.";
+
 
 if (!empty($errors)) {
     foreach ($errors as $err) {

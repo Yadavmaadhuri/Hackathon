@@ -860,7 +860,7 @@
           <div class="row mb-3">
             <div class="col-md-4">
               <p style="float: left;">Team Name</p>
-              <input type="text" class="form-control" id="teamName" name="team_name" required>
+              <input type="text" class="form-control" id="teamName" name="team_name"  maxlength="100" required>
               <div id="teamNameError" class="error"></div>
             </div>
             <div class="col-md-4 d-none">
@@ -924,7 +924,7 @@
 
                 <div class="col-6">
                   <label class="mb-1">Name</label>
-                  <input type="text" class="form-control mb-2" id="mName" placeholder="Full Name" required>
+                  <input type="text" class="form-control mb-2" id="mName"  maxlength="100" placeholder="Full Name" required>
                   <div id="mNameError" class="error"></div>
                 </div>
               </div>
@@ -932,19 +932,19 @@
               <div class="row">
                 <div class="col-6">
                   <label class="mb-1">Email</label>
-                  <input type="email" class="form-control mb-2" id="mEmail" placeholder="Email" required>
+                  <input type="email" class="form-control mb-2" id="mEmail" maxlength="255" placeholder="Email" required>
                   <div id="mEmailError" class="error"></div>
                 </div>
 
                 <div class="col-6">
                   <label class="mb-1">Phone</label>
-                  <input type="text" class="form-control mb-2" id="mPhone" placeholder="Phone" required>
+                  <input type="text" class="form-control mb-2" id="mPhone"  placeholder="Phone" required>
                   <div id="mPhoneError" class="error"></div>
                 </div>
               </div>
 
               <label class="mb-1">College Name</label>
-              <input type="text" class="form-control mb-2" id="mCollege" placeholder="College Name" required>
+              <input type="text" class="form-control mb-2" id="mCollege" maxlength="100" placeholder="College Name" required>
               <div id="mCollegeError" class="error"></div>
 
 
