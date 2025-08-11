@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HDC Hackathon 2025 | Innovation Challenge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link rel="icon" type="image/png" href="assets/images/hackathon.png" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/images/hackathon.png" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
     <style>
         :root {
             --primary: #2a3b90;
@@ -27,9 +32,9 @@
             --warning: #ffc107;
             --danger: #dc3545;
             --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --shadow-light: 0 4px 20px rgba(0,0,0,0.08);
-            --shadow-medium: 0 8px 30px rgba(0,0,0,0.12);
-            --shadow-heavy: 0 15px 40px rgba(0,0,0,0.15);
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -51,7 +56,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            /* max-width: 1200px; */
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -84,7 +89,7 @@
         .loader-spinner {
             width: 60px;
             height: 60px;
-            border: 4px solid rgba(255,255,255,0.3);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             border-top: 4px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -92,8 +97,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Enhanced Header */
@@ -237,7 +247,7 @@
             transition: var(--transition);
         }
 
-        .mobile-menu-toggle.active span:nth-child(1) {
+        /* .mobile-menu-toggle.active span:nth-child(1) {
             transform: rotate(45deg) translate(5px, 5px);
         }
 
@@ -247,38 +257,58 @@
 
         .mobile-menu-toggle.active span:nth-child(3) {
             transform: rotate(-45deg) translate(7px, -6px);
-        }
+        } */
 
+
+        /* Mobile dropdown menu */
         .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 300px;
-            height: 100vh;
+            position: absolute;
+            /* anchor to header */
+            top: 60px;
+            /* adjust to match your header height */
+            right: 10px;
+            /* small gap from right edge */
+            width: 200px;
+            /* compact width */
             background: white;
             box-shadow: var(--shadow-heavy);
-            transition: var(--transition);
-            padding: 100px 30px 30px;
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 0;
+            /* start closed */
+            opacity: 0;
+            /* invisible when closed */
+            transition: max-height 0.3s ease, opacity 0.3s ease;
             z-index: 999;
         }
 
+        /* Open state */
         .mobile-menu.active {
-            right: 0;
+            max-height: 300px;
+            /* just enough for links */
+            opacity: 1;
         }
 
+        /* Menu links */
         .mobile-menu a {
             display: block;
-            padding: 15px 0;
+            padding: 12px 15px;
             color: var(--dark);
             text-decoration: none;
             font-weight: 500;
             border-bottom: 1px solid var(--light-gray);
-            transition: var(--transition);
+            background: white;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+            /* no border on last link */
         }
 
         .mobile-menu a:hover {
             color: var(--primary);
-            padding-left: 10px;
+            background: gray;
         }
 
         /* Enhanced Hero Section */
@@ -399,7 +429,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: var(--transition);
         }
 
@@ -480,8 +510,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
         }
 
         .floating-icon {
@@ -550,7 +587,7 @@
             box-shadow: var(--shadow-light);
             transition: var(--transition);
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -742,8 +779,13 @@
         }
 
         @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .cta-content {
@@ -829,7 +871,7 @@
         }
 
         .footer-logo {
-          text-decoration:none;
+            text-decoration: none;
             font-size: 1.8rem;
             font-weight: 800;
             color: white;
@@ -854,7 +896,7 @@
         }
 
         .footer-about p {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 1rem;
             line-height: 1.8;
             margin-bottom: 25px;
@@ -915,7 +957,7 @@
         }
 
         .footer-links a {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             transition: var(--transition);
             font-size: 1rem;
@@ -930,8 +972,8 @@
         .footer-bottom {
             text-align: center;
             padding-top: 40px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 1rem;
             position: relative;
             z-index: 2;
@@ -973,6 +1015,7 @@
                 opacity: 0;
                 transform: translateX(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -984,6 +1027,7 @@
                 opacity: 0;
                 transform: translateX(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -995,6 +1039,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -1075,6 +1120,24 @@
                 min-width: 80px;
                 padding: 20px 15px;
             }
+
+            .footer-content {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+
+            .remove-btn {
+                font-size: 9px;
+                padding: 0 3px;
+                top: 2.5px;
+                right: 2.5px;
+            }
+
+
+
         }
 
         @media (max-width: 576px) {
@@ -1102,81 +1165,61 @@
             .cta-title {
                 font-size: 2.2rem;
             }
+
+
+
+
+
         }
     </style>
 </head>
-<body>
-    <!-- Loading Screen -->
-    <!-- <div class="loader" id="loader">
-        <div class="loader-content">
-            <div class="loader-spinner"></div>
-            <h3>Loading HDC Hackathon 2025...</h3>
-        </div>
-    </div> -->
 
-    <!-- Header -->
-    <header class="main-header" id="header">
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">HDC<span>Hackathon</span></a>
-                <nav class="nav-links">
-                    <a href="#home">Home</a>
-                    <a href="#features">Features</a>
-                    <a href="#guidelines">Guidelines</a>
-                    <a href="registration/register">Register</a>
-                    <a href="#contact">Contact</a>
-                    <!--<a href="registration/register" class="btn-outline">Register</a>-->
-                </nav>
-                <div class="mobile-menu-toggle" id="mobileToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+<body>
+
+    <div>
+        <!-- Header -->
+        <header class="main-header" id="header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo">HDC<span>Hackathon</span></a>
+                    <nav class="nav-links">
+                        <a href="#home">Home</a>
+                        <a href="#features">Features</a>
+                        <a href="#guidelines">Guidelines</a>
+                        <a href="registration/register">Register</a>
+                        <a href="#contact">Contact</a>
+                        <!--<a href="registration/register" class="btn-outline">Register</a>-->
+                    </nav>
+                    <div class="mobile-menu-toggle" id="mobileToggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#home">Home</a>
-            <a href="#features">Features</a>
-            <a href="#guidelines">Guidelines</a>
-            <a href="registration/register">Register</a>
-            <a href="#contact">Contact</a>
-            <a href="registration/register">Register</a>
-        </div>
-    </header>
+            <!-- mobile menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#guidelines">Guidelines</a>
+                <a href="registration/register">Register</a>
+                <a href="#contact">Contact</a>
+
+            </div>
+        </header>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <!-- <div class="floating-element">
-            <div class="floating-icon">💡</div>
-        </div>
-        <div class="floating-element">
-            <div class="floating-icon">🚀</div>
-        </div>
-        <div class="floating-element">
-            <div class="floating-icon">⚡</div>
-        </div> -->
-        
+
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
                     <h1 class="hero-title">HDC Hackathon <span>2025</span></h1>
-                    <p class="hero-subtitle">Join the most exciting innovation challenge of the year. Collaborate with brilliant minds, build groundbreaking solutions, and compete for amazing prizes.</p>
-                    
-                    <!-- <div class="hero-stats">
-                        <div class="stat-item">
-                            <span class="stat-number" data-count="500">0</span>
-                            <span class="stat-label">Participants</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number" data-count="48">0</span>
-                            <span class="stat-label">Hours</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number" data-count="50">0</span>
-                            <span class="stat-label">K Prizes</span>
-                        </div>
-                    </div> -->
-                    
+                    <p class="hero-subtitle">Join the most exciting innovation challenge of the year. Collaborate with
+                        brilliant minds, build groundbreaking solutions, and compete for amazing prizes.</p>
+
+
                     <a href="registration/register" class="btn-primary" style="text-decoration:none;;">
                         <span>Register Your Team</span>
                         <i class="fas fa-arrow-right"></i>
@@ -1194,7 +1237,8 @@
         <div class="container">
             <div class="section-title">
                 <h2>Why Participate?</h2>
-                <p>Join thousands of innovators in this premier hackathon experience with unique opportunities and cutting-edge technology</p>
+                <p>Join thousands of innovators in this premier hackathon experience with unique opportunities and
+                    cutting-edge technology</p>
             </div>
 
             <div class="features">
@@ -1203,7 +1247,8 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <h3 class="feature-title">Team Management</h3>
-                    <p class="feature-text">Register your team of exactly 4 members and manage all details through our intuitive dashboard with real-time collaboration tools.</p>
+                    <p class="feature-text">Register your team of exactly 4 members and manage all details through our
+                        intuitive dashboard with real-time collaboration tools.</p>
                 </div>
 
                 <div class="feature-card fade-in-up">
@@ -1211,7 +1256,8 @@
                         <i class="fas fa-cloud-upload-alt"></i>
                     </div>
                     <h3 class="feature-title">Secure Uploads</h3>
-                    <p class="feature-text">Submit required documents with our validated upload system that includes live previews, file checks, and secure cloud storage.</p>
+                    <p class="feature-text">Submit required documents with our validated upload system that includes
+                        live previews, file checks, and secure cloud storage.</p>
                 </div>
 
                 <div class="feature-card fade-in-up">
@@ -1219,7 +1265,8 @@
                         <i class="fas fa-bell"></i>
                     </div>
                     <h3 class="feature-title">Instant Notifications</h3>
-                    <p class="feature-text">Get real-time SMS confirmations and team approval status updates through our secure gateway with 24/7 monitoring.</p>
+                    <p class="feature-text">Get real-time SMS confirmations and team approval status updates through our
+                        secure gateway with 24/7 monitoring.</p>
                 </div>
             </div>
         </div>
@@ -1244,54 +1291,23 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <!-- <section class="cta-section" id="register">
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">Ready to Innovate?</h2>
-                <p class="cta-text">Don't miss your chance to be part of the most anticipated hackathon of the year. Register your team today and start your innovation journey with industry experts and mentors.</p>
-                
-                Countdown Timer
-                <div class="countdown" id="countdown">
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="days">00</span>
-                        <span class="countdown-label">Days</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="hours">00</span>
-                        <span class="countdown-label">Hours</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="minutes">00</span>
-                        <span class="countdown-label">Minutes</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="seconds">00</span>
-                        <span class="countdown-label">Seconds</span>
-                    </div>
-                </div>
-                
-                <button class="btn-primary" onclick="openRegistrationModal()">
-                    <span>Register Now</span>
-                    <i class="fas fa-rocket"></i>
-                </button>
-            </div>
-        </div>
-    </section> -->
-
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
                     <a href="#" class="footer-logo">HDC<span>Hackathon</span></a>
-                    <p>The premier hackathon event fostering innovation and collaboration among the brightest minds since 2015. Join us in shaping the future of technology.</p>
+                    <p>The premier hackathon event fostering innovation and collaboration among the brightest minds
+                        since 2015. Join us in shaping the future of technology.</p>
                     <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/share/19VNBxMkFK/" class="social-link"><i
+                                class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/hdc.college?igsh=MWV2Z2xwN3czMGdzMg==" class="social-link"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/himalayacollege/" class="social-link"><i
+                                class="fab fa-linkedin"></i></a>
+                        <!-- <a href="#" class="social-link"><i class="fab fa-github"></i></a> -->
+                        <!-- <a href="#" class="social-link"><i class="fab fa-twitter"></i></a> -->
                     </div>
                 </div>
                 <div class="footer-links">
@@ -1335,17 +1351,17 @@
 
     <script>
         // Loading Screen
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 1500);
         });
 
         // Header Scroll Effect
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const header = document.getElementById('header');
             const scrollTop = document.getElementById('scrollTop');
-            
+
             if (window.scrollY > 100) {
                 header.classList.add('scrolled');
                 scrollTop.classList.add('visible');
@@ -1359,14 +1375,14 @@
         const mobileToggle = document.getElementById('mobileToggle');
         const mobileMenu = document.getElementById('mobileMenu');
 
-        mobileToggle.addEventListener('click', function() {
+        mobileToggle.addEventListener('click', function () {
             mobileToggle.classList.toggle('active');
             mobileMenu.classList.toggle('active');
         });
 
         // Close mobile menu when clicking on links
         document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function () {
                 mobileToggle.classList.remove('active');
                 mobileMenu.classList.remove('active');
             });
@@ -1380,7 +1396,7 @@
         }
 
         // Scroll to Top
-        document.getElementById('scrollTop').addEventListener('click', function() {
+        document.getElementById('scrollTop').addEventListener('click', function () {
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
@@ -1390,13 +1406,13 @@
         // Counter Animation
         function animateCounters() {
             const counters = document.querySelectorAll('[data-count]');
-            
+
             counters.forEach(counter => {
                 const target = parseInt(counter.getAttribute('data-count'));
                 const duration = 2000;
                 const step = target / (duration / 16);
                 let current = 0;
-                
+
                 const timer = setInterval(() => {
                     current += step;
                     if (current >= target) {
@@ -1422,7 +1438,7 @@
                         entry.target.style.opacity = '1';
                         entry.target.style.transform = 'translateY(0)';
                     }
-                    
+
                     // Animate counters when hero section is visible
                     if (entry.target.id === 'home') {
                         setTimeout(animateCounters, 500);
@@ -1490,37 +1506,37 @@
         });
 
         // Add parallax effect to floating elements
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const scrolled = window.pageYOffset;
             const parallax = document.querySelectorAll('.floating-element');
             const speed = 0.5;
 
             parallax.forEach(element => {
                 const yPos = -(scrolled * speed);
-                element.style.transform = translateY(${yPos}px);
+                element.style.transform = translateY(${ yPos }px);
             });
         });
 
         // Add hover effects to feature cards
         document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
+            card.addEventListener('mouseenter', function () {
                 this.style.transform = 'translateY(-15px) scale(1.02)';
             });
-            
-            card.addEventListener('mouseleave', function() {
+
+            card.addEventListener('mouseleave', function () {
                 this.style.transform = 'translateY(0) scale(1)';
             });
         });
 
         // Add ripple effect to buttons
         document.querySelectorAll('.btn-primary, .btn-outline').forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
+
                 ripple.style.cssText = `
                     position: absolute;
                     width: ${size}px;
@@ -1533,11 +1549,11 @@
                     animation: ripple 0.6s linear;
                     pointer-events: none;
                 `;
-                
+
                 this.style.position = 'relative';
                 this.style.overflow = 'hidden';
                 this.appendChild(ripple);
-                
+
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
@@ -1555,6 +1571,52 @@
             }
         `;
         document.head.appendChild(style);
+
     </script>
+    <!-- for menu toggle -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mobileToggle = document.getElementById('mobileToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileToggle && mobileMenu) {
+                mobileToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mobileToggle.classList.toggle('active');
+                    mobileMenu.classList.toggle('active');
+                });
+
+                document.querySelectorAll('.mobile-menu a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileToggle.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        mobileToggle.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    }
+                });
+
+                document.querySelectorAll('.mobile-menu a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileToggle.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+                        mobileToggle.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
+
 </html>

@@ -209,33 +209,61 @@ include_once('topbar.php');
                 <!-- <input type="hidden" name="team_id" id="editTeamId"> -->
                 <input type="hidden" name="id" id="editMemberId">
 
-                <input type="number" class="form-control mb-2" id="mSymbol" name="symbol_no" placeholder="Symbol No."
-                    required>
-                <div id="mSymbolError" class="error"></div>
+                <div class="row">
+                    <div class="col-6">
+                        <label class="mb-1">Symbol Number</label>
+                        <input type="number" class="form-control mb-2" id="mSymbol" placeholder="Symbol No." required>
+                        <div id="mSymbolError" class="error"></div>
+                    </div>
 
-                <input type="text" class="form-control mb-2" id="mName" name="member_name" placeholder="Full Name"
-                    required>
-                <div id="mNameError" class="error"></div>
+                    <div class="col-6">
+                        <label class="mb-1">Name</label>
+                        <input type="text" class="form-control mb-2" id="mName" placeholder="Full Name" required>
+                        <div id="mNameError" class="error"></div>
+                    </div>
+                </div>
 
-                <input type="email" class="form-control mb-2" id="mEmail" name="email" placeholder="Email" required>
-                <div id="mEmailError" class="error"></div>
+                <div class="row">
+                    <div class="col-6">
+                        <label class="mb-1">Email</label>
+                        <input type="email" class="form-control mb-2" id="mEmail" placeholder="Email" required>
+                        <div id="mEmailError" class="error"></div>
+                    </div>
 
-                <input type="text" class="form-control mb-2" id="mPhone" name="phone" placeholder="Phone" required>
-                <div id="mPhoneError" class="error"></div>
+                    <div class="col-6">
+                        <label class="mb-1">Phone</label>
+                        <input type="text" class="form-control mb-2" id="mPhone" placeholder="Phone" required>
+                        <div id="mPhoneError" class="error"></div>
+                    </div>
+                </div>
 
-                <input type="text" class="form-control mb-2" id="mCollege" name="college" placeholder="College Name"
-                    required>
+                <label class="mb-1">College Name</label>
+                <input type="text" class="form-control mb-2" id="mCollege" placeholder="College Name" required>
                 <div id="mCollegeError" class="error"></div>
 
-                <label>Photo Card (max 200KB)</label>
-                <input type="file" class="form-control mb-2" id="mPhoto" name="photo" accept="image/*">
-                <img class="preview" id="photoPreview"
-                    style="display:none; width:80px; height:80px; object-fit:cover;" />
+                <div class="row">
+                    <!-- Photo Upload -->
+                    <div class="col-6 text-left">
+                        <label class="file-label d-block mb-2">Photo Card (max 200KB)</label>
+                        <div class="image-upload-container" onclick="document.getElementById('mPhoto').click()">
+                            <img id="photoPreview" src="../assets/images/image_preview.png" alt="Upload Photo">
+                            <button type="button" class="remove-btn" id="photoRemoveBtn"
+                                onclick="removePhotoPreview(event)">&times;</button>
+                        </div>
+                        <input type="file" id="mPhoto" accept="image/*" required style="display: none;">
+                    </div>
 
-                <label>Admit Card (max 200KB)</label>
-                <input type="file" class="form-control mb-2" id="mAdmit" name="admit_card" accept="image/*">
-                <img class="preview" id="admitPreview"
-                    style="display:none; width:80px; height:80px; object-fit:cover;" />
+                    <!-- Admit Upload -->
+                    <div class="col-6 text-left">
+                        <label class="file-label d-block mb-2">Admit Card (max 200KB)</label>
+                        <div class="image-upload-container" onclick="document.getElementById('mAdmit').click()">
+                            <img id="admitPreview" src="../assets/images/image_preview.png" alt="Upload Admit">
+                            <button type="button" class="remove-btn" id="admitRemoveBtn"
+                                onclick="removeAdmitPreview(event)">&times;</button>
+                        </div>
+                        <input type="file" id="mAdmit" accept="image/*" required style="display: none;">
+                    </div>
+                </div> style="display:none; width:80px; height:80px; object-fit:cover;" />
 
                 <button type="submit" class="btn btn-primary w-100">Save Changes</button>
             </form>

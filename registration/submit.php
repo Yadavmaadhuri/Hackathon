@@ -23,14 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['team_name'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['team_name'], $_POST['college_name']) || empty($_POST['team_name']) || empty($_POST['college_name'])) {
         http_response_code(400);
-        echo json_encode(["error" => "Team Name are required."]);
+        echo json_encode(["error" => "Team Name is required."]);
         exit;
     }
 
     $teamName = trim($_POST['team_name']);
     $collegeName = trim($_POST['college_name']);
 
-    if (!preg_match("/^[a-zA-Z\s]+$/", $teamName) || !preg_match("/^[a-zA-Z\s]+$/", $collegeName)) {
+    if (!preg_match("/^[a-zA-Z\s]+$/", $teamName) || !preg_match("/^[a-zA-Z\s'.-]+$/", $collegeName)) {
         http_response_code(400);
         echo json_encode(["error" => "Invalid Team or College Name."]);
         exit;

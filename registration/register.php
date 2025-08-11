@@ -7,9 +7,13 @@
   <title>HDC Hackathon Registration</title>
   <link rel="icon" href="../assets/images/hackathon.png" type="image/png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     :root {
       --theme-color: #104594;
@@ -32,7 +36,6 @@
       --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
       --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
       --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.15);
-
     }
 
     * {
@@ -53,26 +56,14 @@
       overflow-x: hidden;
     }
 
-
-    /* body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f7f9;
+    .container {
+      /* max-width: 1200px; */
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
-    .navbar {
-      background-color: var(--theme-color);
-    }
-
-    .navbar-brand,
-    .navbar .nav-link {
-      color: #fff !important;
-      font-weight: 600;
-    } */
-
-    /* header section */
     /* Enhanced Header */
     .main-header {
-      /* margin-top: -30px; */
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
       box-shadow: var(--shadow-light);
@@ -80,7 +71,6 @@
       width: 100%;
       z-index: 1000;
       transition: var(--transition);
-      display: block;
     }
 
     .main-header.scrolled {
@@ -162,6 +152,7 @@
       width: 100%;
     }
 
+
     .btn-outline {
       border: 2px solid var(--primary);
       color: var(--primary);
@@ -213,68 +204,82 @@
       transition: var(--transition);
     }
 
-    .mobile-menu-toggle.active span:nth-child(1) {
+    /* .mobile-menu-toggle.active span:nth-child(1) {
       transform: rotate(45deg) translate(5px, 5px);
-    }
+    } */
 
-    .mobile-menu-toggle.active span:nth-child(2) {
+    /* .mobile-menu-toggle.active span:nth-child(2) {
       opacity: 0;
-    }
+    } */
 
-    .mobile-menu-toggle.active span:nth-child(3) {
+    /* .mobile-menu-toggle.active span:nth-child(3) {
       transform: rotate(-45deg) translate(7px, -6px);
-    }
+    } */
 
+
+    /* Mobile dropdown menu */
     .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      height: 100vh;
+      position: absolute;
+      /* anchor to header */
+      top: 60px;
+      /* adjust to match your header height */
+      right: 10px;
+      /* small gap from right edge */
+      width: 200px;
+      /* compact width */
       background: white;
       box-shadow: var(--shadow-heavy);
-      transition: var(--transition);
-      padding: 100px 30px 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      max-height: 0;
+      /* start closed */
+      opacity: 0;
+      /* invisible when closed */
+      transition: max-height 0.3s ease, opacity 0.3s ease;
       z-index: 999;
     }
 
+    /* Open state */
     .mobile-menu.active {
-      right: 0;
+      max-height: 300px;
+      /* just enough for links */
+      opacity: 1;
     }
 
+    /* Menu links */
     .mobile-menu a {
       display: block;
-      padding: 15px 0;
+      padding: 12px 15px;
       color: var(--dark);
       text-decoration: none;
       font-weight: 500;
       border-bottom: 1px solid var(--light-gray);
-      transition: var(--transition);
+      background: white;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+      /* no border on last link */
     }
 
     .mobile-menu a:hover {
       color: var(--primary);
-      padding-left: 10px;
+      background: var(--light-gray);
     }
 
     /* Form section */
     .form-section {
       background: #fff;
-      padding: 30px;
+      padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px #00000020;
       margin-top: 30px;
     }
 
-    /* footer {
-      background-color: var(--theme-color);
-      color: #fff;
-      text-align: center;
-      padding: 15px 0;
-      margin-top: 60px;
-    } */
     .section-title {
       text-align: center;
+      margin-top: 20px;
       margin-bottom: 80px;
       position: relative;
     }
@@ -306,6 +311,8 @@
     }
 
 
+    /* query */
+
     .modal-header {
       background-color: var(--theme-color);
       color: white;
@@ -325,7 +332,13 @@
     .error {
       color: red;
       font-size: 0.875em;
+      margin-bottom: 15px;
+      text-align: left;
+      padding-left: 0;
+      margin-left: 0;
     }
+
+
 
     .preview {
       max-width: 100%;
@@ -333,8 +346,7 @@
       margin-top: 5px;
     }
 
-    /* css of loader */
-    /* Loader styles */
+    /* loader */
     #loaderOverlay {
       position: fixed;
       top: 0;
@@ -352,8 +364,7 @@
       text-align: center;
     }
 
-    /* css for footer */
-    /* Enhanced Footer */
+    /* footer */
     footer {
       background: linear-gradient(135deg, var(--dark) 0%, #1a1d23 100%);
       color: white;
@@ -491,7 +502,6 @@
       z-index: 2;
     }
 
-    /* Scroll to Top Button */
     .scroll-top {
       position: fixed;
       bottom: 30px;
@@ -521,7 +531,6 @@
       box-shadow: 0 5px 15px rgba(42, 59, 144, 0.4);
     }
 
-    /* Animations */
     @keyframes slideInLeft {
       from {
         opacity: 0;
@@ -562,7 +571,7 @@
       animation: fadeInUp 0.8s ease-out;
     }
 
-    /* Responsive Styles */
+    /* Responsive Styles (kept same as original intent) */
     @media (max-width: 992px) {
       .nav-links {
         display: none;
@@ -571,6 +580,8 @@
       .mobile-menu-toggle {
         display: flex;
       }
+
+
 
       .hero-content {
         grid-template-columns: 1fr;
@@ -599,6 +610,9 @@
       .countdown {
         gap: 20px;
       }
+
+
+
     }
 
     @media (max-width: 768px) {
@@ -611,7 +625,23 @@
       }
 
       .section-title h2 {
-        font-size: 2.2rem;
+        font-size: 1.5rem;
+
+      }
+
+      .section-title p {
+        font-size: 0.6rem;
+      }
+
+      #table-responsive {
+        margin: 0px;
+      }
+
+      #memberTable th,
+      #memberTable td {
+        font-size: 0.5rem;
+
+
       }
 
       .feature-card {
@@ -632,7 +662,77 @@
         min-width: 80px;
         padding: 20px 15px;
       }
+
+
+      .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      /*  add member button */
+      #openAddMemberBtn {
+        font-size: 0.875rem;
+        /* smaller text */
+        padding: 0.25rem 0.5rem;
+        /* less padding */
+        margin: 0.25rem;
+        width: 100%;
+        display: block;
+        /* tighter margin */
+      }
+
+      #openAddMemberBtn i {
+        font-size: 0.9rem;
+        /* shrink icon too */
+      }
+
+      /* register  */
+      #registerbtn {
+        font-size: 0.875rem;
+        /* smaller text */
+        padding: 0.25rem 0.5rem;
+        /* less padding */
+        margin: 0.25rem;
+        width: 100%;
+        display: block;
+        /* tighter margin */
+      }
+
+      #registerbtn i {
+        font-size: 0.9rem;
+        /* shrink icon too */
+      }
+
+      #addToListBtn {
+        font-size: 0.875rem;
+        /* smaller text */
+        padding: 0.25rem 0.5rem;
+        /* less padding */
+        margin: 0.25rem;
+        /* tighter margin */
+        width: 100%;
+        /* full width */
+        display: block;
+      }
+
+      #addToListBtn i {
+        font-size: 0.9rem;
+      }
+
+      .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
     }
+
+
+
 
     @media (max-width: 576px) {
       .hero {
@@ -664,12 +764,52 @@
     @media (min-width: 1200px) {
       .custom-modal-width {
         max-width: 1000px;
-        /* Adjust as needed */
       }
     }
 
     .modal-body {
       overflow-x: hidden;
+    }
+
+    .image-upload-container {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 150px;
+      height: 150px;
+      background-color: #f9f9f9;
+      transition: border-color 0.3s;
+    }
+
+    .image-upload-container:hover {
+      border-color: #092448;
+    }
+
+    .image-upload-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #ff4444;
+      border: none;
+      color: white;
+      font-size: 18px;
+      padding: 0 6px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+    }
+
+    .remove-btn:hover {
+      background: #cc0000;
     }
   </style>
 </head>
@@ -685,10 +825,10 @@
             <a href="../index">Home</a>
             <a href="../index#features">Features</a>
             <a href="../index#guidelines">Guidelines</a>
-            <a href="registration/register">Register</a>
+            <a href="#register">Register</a>
             <a href="../index#contact">Contact</a>
-
           </nav>
+          <!-- Hamburger Icon -->
           <div class="mobile-menu-toggle" id="mobileToggle">
             <span></span>
             <span></span>
@@ -696,31 +836,29 @@
           </div>
         </div>
       </div>
-
+      <!-- Mobile Menu -->
       <div class="mobile-menu" id="mobileMenu">
         <a href="../index#home">Home</a>
         <a href="../index#features">Features</a>
         <a href="../index#guidelines">Guidelines</a>
-        <a href="registration/register">Register</a>
+        <a href="#register">Register</a>
         <a href="../index#contact">Contact</a>
       </div>
     </header>
   </div>
 
-  <div style="min-height: 70px;">
+  <div style="min-height: 80px;">
     new line
   </div>
 
-
   <!-- Registration Form -->
-  <div class="wrapper-form-table m-5">
-    <div class="container" style="margin-top:30px;">
+  <div class="wrapper-form-table">
+    <div class="container" style="margin-top:20px;">
       <div class="form-section section-title">
         <h2 class="text-center mb-4">Team Registration</h2>
-        <form id="teamForm">
+        <form id="teamForm" novalidate>
           <div class="row mb-3">
             <div class="col-md-4">
-              <!-- <label for="teamName" class="form-label">Team Name</label> -->
               <p style="float: left;">Team Name</p>
               <input type="text" class="form-control" id="teamName" name="team_name" required>
               <div id="teamNameError" class="error"></div>
@@ -731,7 +869,8 @@
               <div id="collegeNameError" class="error"></div>
             </div>
             <div class="col-md-8 d-flex align-items-end justify-content-end mt-2 mt-md-2" id="addMemberBtnDiv">
-              <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+              <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#addMemberModal"
+                id="openAddMemberBtn">
                 <i class="bi bi-person-plus-fill"></i> Add Member
               </button>
             </div>
@@ -752,7 +891,6 @@
                   <th>Admit Card</th>
                   <th>Action</th>
                 </tr>
-
               </thead>
               <tbody></tbody>
             </table>
@@ -767,154 +905,6 @@
     </div>
 
     <!-- Modal for Adding Members -->
-    <!-- <div class="modal fade" id="addMemberModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Add Member</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <form id="memberForm">
-              <div class="row">
-                <div class="col-6">
-                  <label class="mb-1">Symbol Number</label>
-                  <input type="number" class="form-control mb-2" id="mSymbol" placeholder="Symbol No." required>
-                  <div id="mSymbolError" class="error"></div>
-                </div>
-
-                <div class="col-6">
-                  <label class="mb-1">Name</label>
-                  <input type="text" class="form-control mb-2" id="mName" placeholder="Full Name" required>
-                  <div id="mNameError" class="error"></div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <label class="mb-1">Email</label>
-                  <input type="email" class="form-control mb-2" id="mEmail" placeholder="Email" required>
-                  <div id="mEmailError" class="error"></div>
-                </div>
-
-                <div class="col-6">
-                  <label class="mb-1">Phone</label>
-                  <input type="text" class="form-control mb-2" id="mPhone" placeholder="Phone" required>
-                  <div id="mPhoneError" class="error"></div>
-                </div>
-              </div>
-
-              <label class="mb-1">College Name</label>
-              <input type="text" class="form-control mb-2" id="mCollege" placeholder="College Name" required>
-              <div id="mCollegeError" class="error"></div>
-
-              <div class="row">
-                <div class="col-6">
-                  <label class="mb-1">Photo Card (max 200KB)</label>
-                  <input type="file" class="form-control mb-2" id="mPhoto" accept="image/*" required
-                    onchange="previewPhoto(event)">
-                </div>
-
-                <div class="col-6">
-                  <div id="photoPreviewContainer" style="position: relative; display: none;">
-                    <img class="preview" id="photoPreview"
-                      style="width: 100%; height: auto; border: 1px solid #ccc; border-radius: 4px;" />
-                    <button type="button" onclick="removePhotoPreview()"
-                      style="position: absolute; top: 5px; right: 5px; background: #f00; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">&times;</button>
-                  </div>
-                </div>
-              </div>
-
-              
-              <script>
-                function previewPhoto(event) {
-                  const file = event.target.files[0];
-                  const preview = document.getElementById("photoPreview");
-                  const container = document.getElementById("photoPreviewContainer");
-
-                  if (file && file.type.startsWith("image/")) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                      preview.src = e.target.result;
-                      container.style.display = "block";
-                    };
-                    reader.readAsDataURL(file);
-                  } else {
-                    preview.src = "";
-                    container.style.display = "none";
-                  }
-                }
-
-                function removePhotoPreview() {
-                  const input = document.getElementById("mPhoto");
-                  const preview = document.getElementById("photoPreview");
-                  const container = document.getElementById("photoPreviewContainer");
-
-                  input.value = "";
-                  preview.src = "";
-                  container.style.display = "none";
-                }
-              </script>
-
-
-              <div class="row">
-                <div class="col-6">
-                  <label class="mb-1">Admit Card (max 200KB)</label>
-                  <input type="file" class="form-control mb-2" id="mAdmit" accept="image/*" required
-                    onchange="previewAdmit(event)">
-                </div>
-
-                <div class="col-6">
-                  <div id="admitPreviewContainer" style="position: relative; display: none;">
-                    <img class="preview" id="admitPreview"
-                      style="width: 100%; height: auto; border: 1px solid #ccc; border-radius: 4px;" />
-                    <button type="button" onclick="removeAdmitPreview()"
-                      style="position: absolute; top: 5px; right: 5px; background: #f00; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">&times;</button>
-                  </div>
-                </div>
-              </div>
-              
-              <script>
-                function previewAdmit(event) {
-                  const file = event.target.files[0];
-                  const preview = document.getElementById("admitPreview");
-                  const container = document.getElementById("admitPreviewContainer");
-
-                  if (file && file.type.startsWith("image/")) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                      preview.src = e.target.result;
-                      container.style.display = "block";
-                    };
-                    reader.readAsDataURL(file);
-                  } else {
-                    preview.src = "";
-                    container.style.display = "none";
-                  }
-                }
-
-                function removeAdmitPreview() {
-                  const input = document.getElementById("mAdmit");
-                  const preview = document.getElementById("admitPreview");
-                  const container = document.getElementById("admitPreviewContainer");
-
-                  input.value = "";
-                  preview.src = "";
-                  container.style.display = "none";
-                }
-              </script>
-
-
-              <div class="text-end">
-                <button type="button" class="btn btn-outline" onclick="addMember()">Add to List</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- Modal for Adding Members -->
-    <!-- Modal for Adding Members -->
     <div class="modal fade" id="addMemberModal" tabindex="-1">
       <div class="modal-dialog modal-xl custom-modal-width">
         <div class="modal-content">
@@ -922,8 +912,9 @@
             <h5 class="modal-title">Add Member</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="modal-body">
-            <form id="memberForm">
+          <div class="modal-body ">
+            <!-- made this a proper form so reset() works -->
+            <form id="memberForm" class="p-3" onsubmit="return false;">
               <div class="row">
                 <div class="col-6">
                   <label class="mb-1">Symbol Number</label>
@@ -956,36 +947,36 @@
               <input type="text" class="form-control mb-2" id="mCollege" placeholder="College Name" required>
               <div id="mCollegeError" class="error"></div>
 
+
+
+
               <div class="row">
                 <!-- Photo Upload -->
-                <div class="col-6">
-                  <label class="file-label">Photo Card (max 200KB)</label>
-                  <label class="custom-file-upload">
-                    Browse Photo
-                    <input type="file" id="mPhoto" accept="image/*" required onchange="previewPhoto(event)">
-                  </label>
-                  <div id="photoPreviewContainer" style="position: relative; display: none; margin-top: 10px;">
-                    <img class="preview" id="photoPreview" />
-                    <button type="button" class="remove-btn" onclick="removePhotoPreview()">&times;</button>
+                <div class="col-6 text-left">
+                  <label class="file-label d-block mb-2">Photo Card (max 200KB)</label>
+                  <div class="image-upload-container" onclick="document.getElementById('mPhoto').click()">
+                    <img id="photoPreview" src="../assets/images/image_preview.png" alt="Upload Photo">
+                    <button type="button" class="remove-btn" id="photoRemoveBtn"
+                      onclick="removePhotoPreview(event)">&times;</button>
                   </div>
+                  <input type="file" id="mPhoto" accept="image/*" required style="display: none;">
                 </div>
 
                 <!-- Admit Upload -->
-                <div class="col-6">
-                  <label class="file-label">Admit Card (max 200KB)</label>
-                  <label class="custom-file-upload">
-                    Browse Admit
-                    <input type="file" id="mAdmit" accept="image/*" required onchange="previewAdmit(event)">
-                  </label>
-                  <div id="admitPreviewContainer" style="position: relative; display: none; margin-top: 10px;">
-                    <img class="preview" id="admitPreview" />
-                    <button type="button" class="remove-btn" onclick="removeAdmitPreview()">&times;</button>
+                <div class="col-6 text-left">
+                  <label class="file-label d-block mb-2">Admit Card (max 200KB)</label>
+                  <div class="image-upload-container" onclick="document.getElementById('mAdmit').click()">
+                    <img id="admitPreview" src="../assets/images/image_preview.png" alt="Upload Admit">
+                    <button type="button" class="remove-btn" id="admitRemoveBtn"
+                      onclick="removeAdmitPreview(event)">&times;</button>
                   </div>
+                  <input type="file" id="mAdmit" accept="image/*" required style="display: none;">
                 </div>
               </div>
 
               <div class="text-end mt-3">
-                <button type="button" class="btn btn-outline" onclick="addMember()">Add to List</button>
+                <button type="button" class="btn btn-outline" id="addToListBtn" onclick="addMember()">Add to
+                  List</button>
               </div>
             </form>
           </div>
@@ -993,68 +984,19 @@
       </div>
     </div>
 
-    <!-- JS for Photo Preview -->
-    <script>
-      function previewPhoto(event) {
-        const file = event.target.files[0];
-        const preview = document.getElementById("photoPreview");
-        const container = document.getElementById("photoPreviewContainer");
+    <!-- Loader -->
+    <div id="loaderOverlay" style="display: none;">
+      <div class="loader-container">
+        <div class="spinner-border text-light" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-light mt-2">Processing, please wait...</p>
+      </div>
+    </div>
 
-        if (file && file.type.startsWith("image/")) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            preview.src = e.target.result;
-            container.style.display = "block";
-          };
-          reader.readAsDataURL(file);
-        } else {
-          preview.src = "";
-          container.style.display = "none";
-        }
-      }
-
-      function removePhotoPreview() {
-        const input = document.getElementById("mPhoto");
-        const preview = document.getElementById("photoPreview");
-        const container = document.getElementById("photoPreviewContainer");
-
-        input.value = "";
-        preview.src = "";
-        container.style.display = "none";
-      }
-    </script>
-
-    <!-- JS for Admit Preview -->
-    <script>
-      function previewAdmit(event) {
-        const file = event.target.files[0];
-        const preview = document.getElementById("admitPreview");
-        const container = document.getElementById("admitPreviewContainer");
-
-        if (file && file.type.startsWith("image/")) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            preview.src = e.target.result;
-            container.style.display = "block";
-          };
-          reader.readAsDataURL(file);
-        } else {
-          preview.src = "";
-          container.style.display = "none";
-        }
-      }
-
-      function removeAdmitPreview() {
-        const input = document.getElementById("mAdmit");
-        const preview = document.getElementById("admitPreview");
-        const container = document.getElementById("admitPreviewContainer");
-
-        input.value = "";
-        preview.src = "";
-        container.style.display = "none";
-      }
-    </script>
   </div>
+
+  <!-- Footer -->
 
   <!-- Footer -->
   <footer id="contact">
@@ -1062,23 +1004,25 @@
       <div class="footer-content">
         <div class="footer-about">
           <a href="#" class="footer-logo">HDC<span>Hackathon</span></a>
-          <p>The premier hackathon event fostering innovation and collaboration among the brightest minds since 2015.
-            Join us in shaping the future of technology.</p>
+          <p>The premier hackathon event fostering innovation and collaboration among the brightest minds
+            since 2015. Join us in shaping the future of technology.</p>
           <div class="social-links">
-            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/share/19VNBxMkFK/" class="social-link"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/hdc.college?igsh=MWV2Z2xwN3czMGdzMg==" class="social-link"><i
+                class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/himalayacollege/" class="social-link"><i
+                class="fab fa-linkedin"></i></a>
+            <!-- <a href="#" class="social-link"><i class="fab fa-github"></i></a> -->
+            <!-- <a href="#" class="social-link"><i class="fab fa-twitter"></i></a> -->
           </div>
         </div>
         <div class="footer-links">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="../index">Home</a></li>
-            <li><a href="../index#features">Features</a></li>
-            <li><a href="../index#guidelines">Guidelines</a></li>
-            <li><a href="registration/register">Register</a></li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#guidelines">Guidelines</a></li>
+            <li><a href="/registration/register">Register</a></li>
           </ul>
         </div>
         <div class="footer-links">
@@ -1107,32 +1051,25 @@
   </footer>
 
 
-  <!-- Loader -->
-  <div id="loaderOverlay" style="display: none;">
-    <div class="loader-container">
-      <div class="spinner-border text-light" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <p class="text-light mt-2">Processing, please wait...</p>
-    </div>
-  </div>
 
-
-  <!-- Script -->
+  <!-- Scripts -->
   <script>
-    //For all other Validations
+    // --- Validation patterns & state
     let memberCount = 0;
-
+    const collegePattern = /^[a-zA-Z\s'.-]+$/;
     const namePattern = /^[a-zA-Z\s]+$/;
     const symbolPattern = /^\d{8}$/;
     const phonePattern = /^(98|97)\d{8}$/;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const MAX_FILE_SIZE = 200 * 1024; // 200KB
+    const defaultPreviewSrc = "../assets/images/image_preview.png";
 
+    // --- Simple realtime validation messages
     document.getElementById("teamName").addEventListener("input", function () {
       document.getElementById("teamNameError").textContent = namePattern.test(this.value) ? "" : "Only letters and spaces allowed.";
     });
-    document.getElementById("collegeName").addEventListener("input", function () {
-      document.getElementById("collegeNameError").textContent = namePattern.test(this.value) ? "" : "Only letters and spaces allowed.";
+    document.getElementById("mCollege").addEventListener("input", function () {
+      document.getElementById("mCollegeError").textContent = collegePattern.test(this.value) ? "" : "Invalid college name.";
     });
     document.getElementById("mName").addEventListener("input", function () {
       document.getElementById("mNameError").textContent = namePattern.test(this.value) ? "" : "Only letters and spaces allowed.";
@@ -1147,14 +1084,11 @@
       document.getElementById("mEmailError").textContent = emailPattern.test(this.value) ? "" : "Invalid email format.";
     });
 
-
-    // backend duplicacy check 
-    // for team name
+    // Backend duplicate check for team name (keeps original logic)
     document.getElementById("teamName").addEventListener("input", async function () {
       const teamName = this.value.trim();
       const errorElement = document.getElementById("teamNameError");
 
-      // Reset message if input is empty
       if (teamName.length === 0) {
         errorElement.textContent = "";
         errorElement.style.color = "";
@@ -1164,12 +1098,11 @@
       try {
         let response = await fetch(`submit.php?team_name=${encodeURIComponent(teamName)}`);
         let data = await response.json();
-
         if (data.exists) {
           errorElement.textContent = "Team name already exists.";
           errorElement.style.color = "red";
         } else {
-          errorElement.textContent = ""; // No message if available
+          errorElement.textContent = "";
           errorElement.style.color = "";
         }
       } catch (error) {
@@ -1177,14 +1110,117 @@
       }
     });
 
-
     function checkMemberLimit() {
       const addBtn = document.querySelector("#addMemberBtnDiv button");
       addBtn.disabled = (memberCount >= 4); // disable at 4 members
     }
 
+    // Preview functions with size check
+    function previewPhoto(event) {
+      const file = event.target.files ? event.target.files[0] : null;
+      const preview = document.getElementById("photoPreview");
+      const removeBtn = document.getElementById("photoRemoveBtn");
+
+      if (!file) {
+        preview.src = defaultPreviewSrc;
+        removeBtn.style.display = "none";
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        Swal.fire("Invalid file", "Please upload an image file.", "error");
+        event.target.value = "";
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        Swal.fire("File Too Large", "Photo must be ≤ 200KB.", "warning");
+        event.target.value = "";
+        preview.src = defaultPreviewSrc;
+        removeBtn.style.display = "none";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        removeBtn.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removePhotoPreview(e) {
+      e.stopPropagation(); // Prevent container click
+      const input = document.getElementById("mPhoto");
+      const preview = document.getElementById("photoPreview");
+      const removeBtn = document.getElementById("photoRemoveBtn");
+
+      input.value = "";
+      preview.src = defaultPreviewSrc;
+      removeBtn.style.display = "none";
+    }
+
+    function previewAdmit(event) {
+      const file = event.target.files ? event.target.files[0] : null;
+      const preview = document.getElementById("admitPreview");
+      const removeBtn = document.getElementById("admitRemoveBtn");
+
+      if (!file) {
+        preview.src = defaultPreviewSrc;
+        removeBtn.style.display = "none";
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        Swal.fire("Invalid file", "Please upload an image file.", "error");
+        event.target.value = "";
+        return;
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        Swal.fire("File Too Large", "Admit card must be ≤ 200KB.", "warning");
+        event.target.value = "";
+        preview.src = defaultPreviewSrc;
+        removeBtn.style.display = "none";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        removeBtn.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAdmitPreview(e) {
+      e.stopPropagation();
+      const input = document.getElementById("mAdmit");
+      const preview = document.getElementById("admitPreview");
+      const removeBtn = document.getElementById("admitRemoveBtn");
+
+      input.value = "";
+      preview.src = defaultPreviewSrc;
+      removeBtn.style.display = "none";
+    }
+
+    // Attach change listeners for the hidden file inputs
+    document.getElementById("mPhoto").addEventListener("change", previewPhoto);
+    document.getElementById("mAdmit").addEventListener("change", previewAdmit);
+
+    // Utility to create FileList from a File
+    function createFileList(file) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      return dataTransfer.files;
+    }
+
+    // Add member to table
     function addMember() {
-      if (memberCount >= 4) return;
+      if (memberCount >= 4) {
+        Swal.fire("Limit reached", "A team can have a maximum of 4 members.", "info");
+        return;
+      }
 
       const symbol = document.getElementById("mSymbol").value.trim();
       const name = document.getElementById("mName").value.trim();
@@ -1195,108 +1231,118 @@
       const admitFile = document.getElementById("mAdmit").files[0];
 
       if (!symbolPattern.test(symbol) || !namePattern.test(name) || !emailPattern.test(email) ||
-        !phonePattern.test(phone) || !namePattern.test(college) || !photoFile || !admitFile) {
+        !phonePattern.test(phone) || !collegePattern.test(college) || !photoFile || !admitFile) {
         Swal.fire("Error", "Please correct all input fields.", "error");
         return;
       }
 
-      if (photoFile.size > 200 * 1024 || admitFile.size > 200 * 1024) {
+      if (photoFile.size > MAX_FILE_SIZE || admitFile.size > MAX_FILE_SIZE) {
         Swal.fire("File Too Large", "Each image must be ≤ 200KB.", "warning");
         return;
       }
 
-      const reader1 = new FileReader();
-      const reader2 = new FileReader();
+      // read both files and then insert row
+      const readerPhoto = new FileReader();
+      const readerAdmit = new FileReader();
 
-      reader1.onload = function (e1) {
-        reader2.onload = function (e2) {
+      readerPhoto.onload = function (e1) {
+        readerAdmit.onload = function (e2) {
           memberCount++;
 
           const table = document.getElementById("memberTable").querySelector("tbody");
           const row = document.createElement("tr");
+
+          // Use index starting at 0 for file names so they match later iteration
+          const idx = memberCount - 1;
+
           row.innerHTML = `
-        <td>${memberCount}</td>
-        <td>${symbol}</td>
-        <td>${name}</td>
-        <td>${email}</td>
-        <td>${phone}</td>
-        <td>${college}</td>
-        <td><img src="${e1.target.result}" class="preview" /></td>
-        <td><img src="${e2.target.result}" class="preview" /></td>
-        <td>
-          <input type="file" name="photo_${memberCount - 1}" style="display:none;" />
-          <input type="file" name="admit_${memberCount - 1}" style="display:none;" />
-          <button class="btn btn-danger btn-sm" onclick="removeMember(this)">Remove</button>
-        </td>
-      `;
+            <td>${memberCount}</td>
+            <td>${symbol}</td>
+            <td>${name}</td>
+            <td>${email}</td>
+            <td>${phone}</td>
+            <td>${college}</td>
+            <td><img src="${e1.target.result}" class="preview" /></td>
+            <td><img src="${e2.target.result}" class="preview" /></td>
+            <td>
+              <input type="file" name="photo_${idx}" style="display:none;" />
+              <input type="file" name="admit_${idx}" style="display:none;" />
+              <button class="btn btn-danger btn-sm" onclick="removeMember(this)">Remove</button>
+            </td>
+          `;
 
           table.appendChild(row);
 
-          row.querySelector(`input[name="photo_${memberCount - 1}"]`).files = createFileList(photoFile);
-          row.querySelector(`input[name="admit_${memberCount - 1}"]`).files = createFileList(admitFile);
+          // assign file objects to the hidden inputs
+          const photoInputHidden = row.querySelector(`input[name="photo_${idx}"]`);
+          const admitInputHidden = row.querySelector(`input[name="admit_${idx}"]`);
+          if (photoInputHidden) photoInputHidden.files = createFileList(photoFile);
+          if (admitInputHidden) admitInputHidden.files = createFileList(admitFile);
 
-          document.getElementById("memberForm").reset();
-          document.getElementById("photoPreview").style.display = "none";
-          document.getElementById("admitPreview").style.display = "none";
-
-          bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
-          if (memberCount === 4) {
-            document.getElementById("registerbtn").style.display = "inline-block";
+          // reset the modal form (works because memberForm is a form)
+          const memberFormEl = document.getElementById("memberForm");
+          if (memberFormEl && typeof memberFormEl.reset === "function") {
+            memberFormEl.reset();
           }
+
+          // reset previews to default
+          document.getElementById("photoPreview").src = defaultPreviewSrc;
+          document.getElementById("photoRemoveBtn").style.display = "none";
+          document.getElementById("admitPreview").src = defaultPreviewSrc;
+          document.getElementById("admitRemoveBtn").style.display = "none";
+
+          // hide the modal safely (use getOrCreateInstance)
+          const modalEl = document.getElementById('addMemberModal');
+          if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+            bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+          } else {
+            // fallback: try to trigger modal hide via dispatched event
+            modalEl.classList.remove("show");
+            modalEl.style.display = "none";
+            document.body.classList.remove("modal-open");
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) backdrop.remove();
+          }
+
+          // toggle register button when we have 4 members
+          document.getElementById("registerbtn").style.display = (memberCount === 4) ? "inline-block" : "none";
+
           checkMemberLimit();
         };
-        reader2.readAsDataURL(admitFile);
+        readerAdmit.readAsDataURL(admitFile);
       };
-      reader1.readAsDataURL(photoFile);
-    }
-
-    // Create FileList object from single File
-    function createFileList(file) {
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      return dataTransfer.files;
+      readerPhoto.readAsDataURL(photoFile);
     }
 
 
+
+    // Remove a member row
     function removeMember(button) {
-      button.closest("tr").remove();
+      const tr = button.closest("tr");
+      if (!tr) return;
+      tr.remove();
       memberCount--;
       const rows = document.querySelectorAll("#memberTable tbody tr");
       rows.forEach((row, i) => row.firstElementChild.textContent = i + 1);
+
       if (memberCount < 4) {
         document.getElementById("registerbtn").style.display = "none";
       }
-
-      checkMemberLimit(); // Add this line
+      checkMemberLimit();
     }
 
-
+    // teamForm file safety: ensure any file inputs (hidden) are <= 200KB (extra guard)
     document.getElementById("teamForm").addEventListener("change", function (e) {
-      const file = e.target.files[0];
-      if (file && file.size > 200 * 1024) {
-        Swal.fire("File Too Large", "Each image must be less than or equal to 200KB.", "warning");
-        e.target.value = "";
-        return;
-      }
-
-      document.addEventListener("change", function (e) {
-        if (e.target.matches(".photo-input, .admit-input")) {
-          const file = e.target.files[0];
-          const preview = e.target.nextElementSibling; // Gets the <img> right after the input
-
-          if (file && preview && preview.classList.contains("preview")) {
-            const reader = new FileReader();
-            reader.onload = function (evt) {
-              preview.src = evt.target.result;
-              preview.style.display = "block";
-            };
-            reader.readAsDataURL(file);
-          }
+      const target = e.target;
+      if (target && target.type === "file" && target.files && target.files[0]) {
+        if (target.files[0].size > MAX_FILE_SIZE) {
+          Swal.fire("File Too Large", "Each image must be less than or equal to 200KB.", "warning");
+          target.value = "";
         }
-      });
-
+      }
     });
 
+    // Submit team form
     document.getElementById("teamForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -1347,6 +1393,7 @@
             document.querySelector("#memberTable tbody").innerHTML = "";
             memberCount = 0;
             document.getElementById("registerbtn").style.display = "none";
+            checkMemberLimit();
           } else {
             Swal.fire("Error", data.error || "Something went wrong.", "error");
           }
@@ -1354,11 +1401,60 @@
         .catch(() => {
           // Hide the loader even on error
           document.getElementById("loaderOverlay").style.display = "none";
-
           Swal.fire("Error", "Server error. Please check PHP backend.", "error");
         });
     });
+
+    // for toggle
+    //     document.getElementById('mobileToggle').addEventListener('click', function () {
+    //   document.getElementById('mobileMenu').classList.toggle('active');
+    // });
+
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    // Toggle menu on button click
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent closing when clicking toggle itself
+      mobileToggle.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking a menu link
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      }
+    });
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      }
+    });
+
+
+
+
   </script>
+
+  <!-- Bootstrap JS (keep at the end so bootstrap is available for modal operations) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

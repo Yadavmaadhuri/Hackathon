@@ -14,7 +14,7 @@
   <a href="setting" class="<?= $current_page == 'setting.php' ? 'active' : '' ?>">
     <i class="fa-solid fa-gear px-2"></i>Settings
   </a>
-  <a href="logout" class="<?= $current_page == 'logout.php' ? 'active' : '' ?>">
+  <a href="logout" id="logoutBtn" class="<?= $current_page == 'logout.php' ? 'active' : '' ?>">
     <i class="fa-solid fa-right-from-bracket px-2"></i>Logout
   </a>
 </div>
@@ -29,3 +29,30 @@
   color: white;
 }
 </style>
+
+<!-- Logout button -->
+<!-- <button id="logoutBtn">Logout</button> -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('logoutBtn').addEventListener('click', function (e) {
+    e.preventDefault(); // stop default link/button behavior
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you really want to log out?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, log me out',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect to logout page that ends session
+            window.location.href = "logout.php?confirmed=true";
+        }
+    });
+});
+</script>
+
