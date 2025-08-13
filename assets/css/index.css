@@ -25,6 +25,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: pointer;
         }
 
         html {
@@ -37,6 +38,7 @@
             color: var(--dark);
             line-height: 1.7;
             overflow-x: hidden;
+            cursor: pointer;
         }
 
         .container {

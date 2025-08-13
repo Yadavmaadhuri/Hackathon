@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!preg_match("/^[a-zA-Z\s]+$/", $teamName) || !preg_match("/^[a-zA-Z\s'.-]+$/", $collegeName)) {
         http_response_code(400);
-        echo json_encode(["error" => "Invalid Team Name."]);
+        echo json_encode(["error" => "Invalid Team or College Name."]);
         exit;
     }
 
@@ -73,34 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(["error" => "Exactly 4 members are required."]);
         exit;
     }
-    // if (empty($_POST['symbol'])) {
-    //     http_response_code(400);
-    //     echo json_encode(["error" => "Symbol no. is Required."]);
-    //     exit;
-    // }
-    //   if (empty($_POST['name'])) {
-    //     http_response_code(400);
-    //     echo json_encode(["error" => "Name is Required."]);
-    //     exit;
-    // }
-    //     if (empty($_POST['email'])) {
-    //     http_response_code(400);
-    //     echo json_encode(["error" => "Email Address is Required."]);
-    //     exit;
-    // }
-    // if (empty($_POST['phone'])) {
-    //     http_response_code(400);
-    //     echo json_encode(["error" => "Phone number is Required."]);
-    //     exit;
-    // }
 
-
-    // if (empty($_POST['college'])) {
-    //     http_response_code(400);
-    //     echo json_encode(["error" => "college name is Required."]);
-    //     exit;
-    // }
-
+    
 
     // Ensure upload directories exist
     @mkdir('../uploads/photos', 0777, true);

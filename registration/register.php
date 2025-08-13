@@ -145,7 +145,8 @@
 
                 <div class="col-6">
                   <label class="mb-1">Phone</label>
-                  <input type="text" class="form-control mb-2" id="mPhone" placeholder="Phone" required>
+                  <input type="text" class="form-control mb-2" id="mPhone" placeholder="Phone" maxlength="10"
+                    pattern="(98|97)\d{8}" required>
                   <div id="mPhoneError" class="error"></div>
                 </div>
               </div>
@@ -297,8 +298,14 @@
       const teamName = this.value.trim();
       const errorElement = document.getElementById("teamNameError");
 
+      if (!namePattern.test(teamName)) {
+        errorElement.textContent = "Only letters and spaces allowed.";
+        errorElement.style.color = "red";
+        return;
+      }
+
       if (teamName.length === 0) {
-        errorElement.textContent = "";
+        errorElement.textContent = "Only letters and spaces allowed.";
         errorElement.style.color = "";
         return;
       }
@@ -502,6 +509,12 @@
       return dataTransfer.files;
     }
 
+
+    function normalizePhone(p) {
+      if (p == null) return "";
+      return String(p).replace(/\D/g, "");
+    }
+
     // Add member to table
     function addMember() {
       if (memberCount >= 4) {
@@ -535,16 +548,30 @@
       const photoFile = document.getElementById("mPhoto").files[0];
       const admitFile = document.getElementById("mAdmit").files[0];
 
-      if (!symbolPattern.test(symbol) || !namePattern.test(name) || !emailPattern.test(email) ||
-        !phonePattern.test(phone) || !collegePattern.test(college) || !photoFile || !admitFile) {
-        Swal.fire("Error", "Please correct all input fields.", "error");
-        return;
+
+      // 🔍 Check duplicates in table before adding
+      const table = document.getElementById("memberTable");
+      for (let i = 1; i < table.rows.length; i++) { // skip header
+        // inside duplicate check loop:
+        const existingSymbol = table.rows[i].cells[1].textContent.trim().toLowerCase(); // Symbol No.
+        const existingEmail = table.rows[i].cells[3].textContent.trim().toLowerCase(); // Email
+        const existingPhone = normalizePhone(table.rows[i].cells[4].textContent.trim()); // Phone
+
+
+        if (symbol === existingSymbol) {
+          Swal.fire("Duplicate Symbol", "A member with this symbol already exists.", "error");
+          return;
+        }
+        if (email === existingEmail) {
+          Swal.fire("Duplicate Email", "A member with this email already exists.", "error");
+          return;
+        }
+        if (phone === existingPhone) {
+          Swal.fire("Duplicate Phone", "A member with this phone already exists.", "error");
+          return;
+        }
       }
 
-      if (photoFile.size > MAX_FILE_SIZE || admitFile.size > MAX_FILE_SIZE) {
-        Swal.fire("File Too Large", "Each image must be ≤ 200KB.", "warning");
-        return;
-      }
 
       // read both files and then insert row
       const readerPhoto = new FileReader();
