@@ -64,8 +64,8 @@
         <form id="teamForm" novalidate>
           <div class="row mb-3">
             <div class="col-md-4">
-              <p style="float: left;">Team Name</p>
-              <input type="text" class="form-control" id="teamName" name="team_name"  maxlength="100" required>
+              <p class="mb-sm-2" style="float: left;">Team Name</p>
+              <input type="text" class="form-control" id="teamName" name="team_name" maxlength="100" required>
               <div id="teamNameError" class="error"></div>
             </div>
             <div class="col-md-4 d-none">
@@ -122,14 +122,15 @@
             <form id="memberForm" class="p-3" onsubmit="return false;">
               <div class="row">
                 <div class="col-6">
-                  <label class="mb-1">Symbol Number</label>
-                  <input type="number" class="form-control mb-2" id="mSymbol" placeholder="Symbol No." required>
+                  <label class="mb-1">+2 Symbol No.</label>
+                  <input type="number" class="form-control mb-2" id="mSymbol" placeholder="+2 Symbol No." required>
                   <div id="mSymbolError" class="error"></div>
                 </div>
 
                 <div class="col-6">
                   <label class="mb-1">Name</label>
-                  <input type="text" class="form-control mb-2" id="mName"  maxlength="100" placeholder="Full Name" required>
+                  <input type="text" class="form-control mb-2" id="mName" maxlength="100" placeholder="Full Name"
+                    required>
                   <div id="mNameError" class="error"></div>
                 </div>
               </div>
@@ -137,19 +138,21 @@
               <div class="row">
                 <div class="col-6">
                   <label class="mb-1">Email</label>
-                  <input type="email" class="form-control mb-2" id="mEmail" maxlength="255" placeholder="Email" required>
+                  <input type="email" class="form-control mb-2" id="mEmail" maxlength="255" placeholder="Email"
+                    required>
                   <div id="mEmailError" class="error"></div>
                 </div>
 
                 <div class="col-6">
                   <label class="mb-1">Phone</label>
-                  <input type="text" class="form-control mb-2" id="mPhone"  placeholder="Phone" required>
+                  <input type="text" class="form-control mb-2" id="mPhone" placeholder="Phone" required>
                   <div id="mPhoneError" class="error"></div>
                 </div>
               </div>
 
               <label class="mb-1">College Name</label>
-              <input type="text" class="form-control mb-2" id="mCollege" maxlength="100" placeholder="College Name" required>
+              <input type="text" class="form-control mb-2" id="mCollege" maxlength="100" placeholder="College Name"
+                required>
               <div id="mCollegeError" class="error"></div>
 
 
@@ -315,6 +318,85 @@
       }
     });
 
+    // Backend duplicate check for symbol number
+    document.getElementById("mSymbol").addEventListener("input", async function () {
+      const symbol = this.value.trim();
+      const errorElement = document.getElementById("mSymbolError");
+
+      if (!symbolPattern.test(symbol)) {
+        errorElement.textContent = "Must be 8 digits.";
+        errorElement.style.color = "red";
+        return;
+      }
+
+      try {
+        let response = await fetch(`submit.php?symbol=${encodeURIComponent(symbol)}`);
+        let data = await response.json();
+        if (data.exists) {
+          errorElement.textContent = "Symbol number already registered.";
+          errorElement.style.color = "red";
+        } else {
+          errorElement.textContent = "";
+          errorElement.style.color = "";
+        }
+      } catch (error) {
+        console.error("Error checking symbol:", error);
+      }
+    });
+
+    // Backend duplicate check for email
+    document.getElementById("mEmail").addEventListener("input", async function () {
+      const email = this.value.trim();
+      const errorElement = document.getElementById("mEmailError");
+
+      if (!emailPattern.test(email)) {
+        errorElement.textContent = "Invalid email format.";
+        errorElement.style.color = "red";
+        return;
+      }
+
+      try {
+        let response = await fetch(`submit.php?email=${encodeURIComponent(email)}`);
+        let data = await response.json();
+        if (data.exists) {
+          errorElement.textContent = "Email already registered.";
+          errorElement.style.color = "red";
+        } else {
+          errorElement.textContent = "";
+          errorElement.style.color = "";
+        }
+      } catch (error) {
+        console.error("Error checking email:", error);
+      }
+    });
+
+    // Backend duplicate check for phone
+    document.getElementById("mPhone").addEventListener("input", async function () {
+      const phone = this.value.trim();
+      const errorElement = document.getElementById("mPhoneError");
+
+      if (!phonePattern.test(phone)) {
+        errorElement.textContent = "Invalid phone format.";
+        errorElement.style.color = "red";
+        return;
+      }
+
+      try {
+        let response = await fetch(`submit.php?phone=${encodeURIComponent(phone)}`);
+        let data = await response.json();
+        if (data.exists) {
+          errorElement.textContent = "Phone number already registered.";
+          errorElement.style.color = "red";
+        } else {
+          errorElement.textContent = "";
+          errorElement.style.color = "";
+        }
+      } catch (error) {
+        console.error("Error checking phone:", error);
+      }
+    });
+
+
     function checkMemberLimit() {
       const addBtn = document.querySelector("#addMemberBtnDiv button");
       addBtn.disabled = (memberCount >= 4); // disable at 4 members
@@ -424,6 +506,24 @@
     function addMember() {
       if (memberCount >= 4) {
         Swal.fire("Limit reached", "A team can have a maximum of 4 members.", "info");
+        return;
+      }
+
+      // Check if any validation errors exist
+      const errorIds = [
+        "mSymbolError",
+        "mNameError",
+        "mEmailError",
+        "mPhoneError",
+        "mCollegeError"
+      ];
+      const hasErrors = errorIds.some(id => {
+        const errEl = document.getElementById(id);
+        return errEl && errEl.textContent.trim() !== "";
+      });
+
+      if (hasErrors) {
+        Swal.fire("Error", "Please fix all errors before adding the member.", "error");
         return;
       }
 
@@ -658,6 +758,8 @@
 
 
   </script>
+
+
 
   <!-- Bootstrap JS (keep at the end so bootstrap is available for modal operations) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -2,23 +2,54 @@
 include '../config/database.php';
 
 // Handle GET request: Check if team name exists
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['team_name'])) {
-    $teamName = trim($_GET['team_name']);
-    if (empty($teamName)) {
-        echo json_encode(['exists' => false]);
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    include '../config/database.php';
+
+    if (isset($_GET['team_name'])) {
+        $teamName = $_GET['team_name'];
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM teams WHERE name = ?");
+        $stmt->bind_param("s", $teamName);
+        $stmt->execute();
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        echo json_encode(['exists' => $count > 0]);
         exit;
     }
 
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM teams WHERE name = ?");
-    $stmt->bind_param("s", $teamName);
-    $stmt->execute();
-    $stmt->bind_result($count);
-    $stmt->fetch();
-    $stmt->close();
+    if (isset($_GET['symbol'])) {
+        $symbol = $_GET['symbol'];
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM team_members WHERE symbol_no = ?");
+        $stmt->bind_param("s", $symbol);
+        $stmt->execute();
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        echo json_encode(['exists' => $count > 0]);
+        exit;
+    }
 
-    echo json_encode(['exists' => $count > 0]);
-    exit;
+    if (isset($_GET['email'])) {
+        $email = $_GET['email'];
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM team_members WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        echo json_encode(['exists' => $count > 0]);
+        exit;
+    }
+
+    if (isset($_GET['phone'])) {
+        $phone = $_GET['phone'];
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM team_members WHERE phone = ?");
+        $stmt->bind_param("s", $phone);
+        $stmt->execute();
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        echo json_encode(['exists' => $count > 0]);
+        exit;
+    }
 }
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['team_name'], $_POST['college_name']) || empty($_POST['team_name']) || empty($_POST['college_name'])) {

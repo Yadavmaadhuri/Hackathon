@@ -7,7 +7,7 @@
     <title>HDC Hackathon 2025 | Innovation Challenge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" type="image/png" href="assets/images/hackathon.png" />
+    <link rel="icon" type="image/png" href="assets/images/hackathon.png"/>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
