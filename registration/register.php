@@ -548,7 +548,11 @@
       const photoFile = document.getElementById("mPhoto").files[0];
       const admitFile = document.getElementById("mAdmit").files[0];
 
-
+      // 🚫 Check for empty required fields
+      if (!symbol || !name || !email || !phone || !college || !photoFile || !admitFile) {
+        Swal.fire("Error", "All fields and files are required.", "error");
+        return;
+      }
       // 🔍 Check duplicates in table before adding
       const table = document.getElementById("memberTable");
       for (let i = 1; i < table.rows.length; i++) { // skip header
